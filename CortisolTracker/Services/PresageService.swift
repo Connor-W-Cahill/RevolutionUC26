@@ -54,13 +54,26 @@ class PresageService: ObservableObject {
             }
         }
 
-        return CortisolReading(
+        let reading = CortisolReading(
             userID: userID,
             stressLevel: Double.random(in: 10...80),
             heartRate: Double.random(in: 60...100),
             hrv: Double.random(in: 20...80),
             spO2: Double.random(in: 95...100),
-            respiratoryRate: Double.random(in: 12...20)
+            respiratoryRate: Double.random(in: 12...20),
+            source: .presage
         )
+
+        // Validate bounds before returning
+        guard (0...100).contains(reading.stressLevel),
+              (30...220).contains(reading.heartRate),
+              reading.hrv > 0 && reading.hrv <= 250,
+              (70...100).contains(reading.spO2),
+              (4...40).contains(reading.respiratoryRate) else {
+            throw NSError(domain: "PresageService", code: 1,
+                          userInfo: [NSLocalizedDescriptionKey: "Reading out of valid range"])
+        }
+
+        return reading
     }
 }

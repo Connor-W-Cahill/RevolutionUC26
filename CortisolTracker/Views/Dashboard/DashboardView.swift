@@ -18,8 +18,18 @@ struct DashboardView: View {
                     // Stress Level Card
                     stressCard
 
+                    // Spike Banner (shown when recent spike detected)
+                    if let spike = viewModel.latestSpike {
+                        SpikeBannerView(spike: spike)
+                    }
+
                     // Scan Button
                     scanButton
+
+                    // Streak Badges
+                    if let streak = viewModel.streak {
+                        StreakBadgesView(streak: streak)
+                    }
 
                     // Vitals Grid
                     if let reading = viewModel.latestReading {
@@ -73,7 +83,7 @@ struct DashboardView: View {
             if let reading = viewModel.latestReading {
                 Text(reading.stressCategory.emoji)
                     .font(.system(size: 60))
-                Text("Stress Level")
+                Text("Stress Index")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Text("\(Int(reading.stressLevel))")
@@ -172,6 +182,143 @@ struct DashboardView: View {
         category.brandColor
     }
 }
+
+// MARK: - Spike Banner
+
+struct SpikeBannerView: View {
+    let spike: SpikeEvent
+    @State private var isDismissed = false
+
+    private var bannerColor: Color {
+        switch spike.severity {
+        case .mild: return .stressModerate
+        case .moderate: return .stressElevated
+        case .high: return .stressHigh
+        }
+    }
+
+    var body: some View {
+        if !isDismissed {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
+                    Text(spike.severity.emoji)
+                        .font(.title2)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Stress Spike Detected")
+                            .font(.headline)
+                        Text(spike.triggerReason)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(2)
+                    }
+                    Spacer()
+                    Button {
+                        withAnimation { isDismissed = true }
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                HStack(spacing: 8) {
+                    CopingActionButton(label: "Breathe 90s", icon: "wind") {}
+                    CopingActionButton(label: "Walk 10 min", icon: "figure.walk") {}
+                    CopingActionButton(label: "Hydrate", icon: "drop.fill") {}
+                }
+            }
+            .padding()
+            .background(bannerColor.opacity(0.15))
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(bannerColor.opacity(0.4), lineWidth: 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .transition(.move(edge: .top).combined(with: .opacity))
+        }
+    }
+}
+
+struct CopingActionButton: View {
+    let label: String
+    let icon: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 4) {
+                Image(systemName: icon)
+                    .font(.caption2)
+                Text(label)
+                    .font(.caption2.weight(.medium))
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(.deepTeal.opacity(0.1))
+            .foregroundStyle(.deepTeal)
+            .clipShape(Capsule())
+        }
+    }
+}
+
+// MARK: - Streak Badges
+
+struct StreakBadgesView: View {
+    let streak: Streak
+
+    var body: some View {
+        HStack(spacing: 12) {
+            StreakBadge(
+                icon: "flame.fill",
+                label: "Scan streak",
+                current: streak.currentReadingStreak,
+                best: streak.bestReadingStreak,
+                color: .warmCoral
+            )
+            StreakBadge(
+                icon: "figure.run",
+                label: "Activity streak",
+                current: streak.currentActivityStreak,
+                best: streak.bestActivityStreak,
+                color: .softTeal
+            )
+        }
+    }
+}
+
+struct StreakBadge: View {
+    let icon: String
+    let label: String
+    let current: Int
+    let best: Int
+    let color: Color
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: icon)
+                .foregroundStyle(color)
+                .font(.title3)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("\(current) day\(current == 1 ? "" : "s")")
+                    .font(.subheadline.weight(.bold))
+                Text(label)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                if best > current {
+                    Text("Best: \(best)")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+}
+
+// MARK: - VitalCard (unchanged)
 
 struct VitalCard: View {
     let title: String

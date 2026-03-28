@@ -4,6 +4,8 @@ import Foundation
 class DashboardViewModel: ObservableObject {
     @Published var latestReading: CortisolReading?
     @Published var todayReadings: [CortisolReading] = []
+    @Published var latestSpike: SpikeEvent?
+    @Published var streak: Streak?
     @Published var isLoading = false
     @Published var error: String?
 
@@ -16,8 +18,20 @@ class DashboardViewModel: ObservableObject {
         error = nil
 
         do {
-            todayReadings = try await firebase.fetchReadings(userID: userID, for: Date())
+            async let fetchedReadings = firebase.fetchReadings(userID: userID, for: Date())
+            async let fetchedSpikes = firebase.fetchSpikeEvents(userID: userID, limit: 1)
+            async let fetchedStreak = firebase.fetchStreak(userID: userID)
+
+            todayReadings = try await fetchedReadings
             latestReading = todayReadings.first
+
+            let spikes = try await fetchedSpikes
+            // Only surface spikes from the last 2 hours
+            latestSpike = spikes.first.flatMap { spike in
+                spike.timestamp > Date().addingTimeInterval(-7200) ? spike : nil
+            }
+
+            streak = try await fetchedStreak
         } catch {
             self.error = error.localizedDescription
         }
