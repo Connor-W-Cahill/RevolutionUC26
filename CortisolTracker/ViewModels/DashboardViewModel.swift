@@ -10,7 +10,10 @@ class DashboardViewModel: ObservableObject {
     @Published var error: String?
 
     private let firebase = FirebaseService.shared
-    let presage = PresageService.shared
+
+    var currentUserID: String? {
+        firebase.currentUserID
+    }
 
     func loadData() async {
         guard let userID = firebase.currentUserID else { return }
@@ -39,14 +42,8 @@ class DashboardViewModel: ObservableObject {
         isLoading = false
     }
 
-    func startScan() async {
-        guard let userID = firebase.currentUserID else {
-            error = "Please sign in to take a reading"
-            return
-        }
-
+    func saveReading(_ reading: CortisolReading) async {
         do {
-            let reading = try await presage.startScan(userID: userID)
             try await firebase.saveReading(reading)
             latestReading = reading
             todayReadings.insert(reading, at: 0)

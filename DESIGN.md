@@ -80,11 +80,11 @@ Use iOS system fonts for performance and native feel:
 │  └──────────────────────┘   │
 │                              │
 │  Vitals                      │
-│  ┌─────┐ ┌─────┐ ┌─────┐   │
-│  │ ♥   │ │ HRV │ │ SpO2│   │
-│  │ 72  │ │ 45  │ │ 98% │   │
-│  │ bpm │ │ ms  │ │     │   │
-│  └─────┘ └─────┘ └─────┘   │
+│  ┌──────┐ ┌──────┐ ┌──────┐│
+│  │ ♥    │ │ 🫁   │ │ 🩸   ││
+│  │ 72   │ │ 16   │ │120/80││
+│  │ BPM  │ │ br/m │ │ mmHg ││
+│  └──────┘ └──────┘ └──────┘│
 │                              │
 │  [  Take Reading  ]         │
 │                              │
@@ -99,10 +99,16 @@ Use iOS system fonts for performance and native feel:
 
 **Key elements:**
 - Greeting + notification bell top bar
-- Hero card: stress level with radial/ring gauge, color-coded to stress spectrum
-- Vitals row: 3 compact metric cards (HR, HRV, SpO2)
-- CTA button: "Take Reading" — prominent, Deep Teal, rounded pill shape
+- Hero card: stress index with radial/ring gauge, color-coded to stress spectrum
+- Vitals row: 3 compact metric cards (Pulse Rate, Breathing Rate, Blood Pressure)
+- CTA button: "Take Reading" — prominent, Deep Teal, rounded pill shape → opens Presage SmartSpectraView for camera scan
 - Today's lifestyle log summary
+
+**SDK Integration Note:**
+- "Take Reading" presents the Presage `SmartSpectraView` (SDK-provided camera UI with countdown)
+- SDK returns: `metrics.pulse.strict.value` (BPM), `metrics.breathing.strict.value` (breaths/min), `metrics.bloodPressure.phasic` (BP)
+- Stress index is derived from these vitals (computed by us, not the SDK)
+- The SDK camera view has its own UI — we style the pre/post scan screens, not the capture itself
 
 ### 2. Calendar
 ```
@@ -202,6 +208,58 @@ Use iOS system fonts for performance and native feel:
 - Each tip is personalized based on user's data patterns
 - Quick action buttons: guided breathing, meditation timer, journal prompt
 - Refresh button to get new tips
+
+### 5. Scan Flow (Camera Reading)
+```
+┌─────────────────────────────┐
+│           ← Back             │
+│                              │
+│   Get ready to scan          │
+│                              │
+│   Hold your phone steady     │
+│   and look at the camera     │
+│                              │
+│   ┌──────────────────────┐  │
+│   │                      │  │
+│   │   [SmartSpectraView] │  │
+│   │   (SDK camera UI)    │  │
+│   │                      │  │
+│   └──────────────────────┘  │
+│                              │
+│   Scanning... 18s remaining  │
+│   ━━━━━━━━━━━░░░░░░░░░░░░  │
+│                              │
+└─────────────────────────────┘
+
+        ↓ After scan ↓
+
+┌─────────────────────────────┐
+│          Your Results        │
+│                              │
+│   ┌──────────────────────┐  │
+│   │   Stress Index        │  │
+│   │      ● 32             │  │
+│   │    [radial gauge]     │  │
+│   │     "Low — Nice!"     │  │
+│   └──────────────────────┘  │
+│                              │
+│   ┌──────┐ ┌──────┐ ┌──────┐│
+│   │ 72   │ │ 16   │ │120/80││
+│   │ BPM  │ │ br/m │ │ mmHg ││
+│   └──────┘ └──────┘ └──────┘│
+│                              │
+│   [    Save Reading    ]     │
+│   [    Scan Again      ]     │
+│                              │
+└─────────────────────────────┘
+```
+
+**Key elements:**
+- Pre-scan: brief instruction text, then SDK's SmartSpectraView takes over
+- During scan: progress bar + countdown timer below the camera view
+- Post-scan: results card with computed stress index + all vitals
+- "Save Reading" (primary) persists to Firebase, "Scan Again" (secondary) restarts
+- Back button returns to Dashboard without saving
 
 ## Component Styles
 

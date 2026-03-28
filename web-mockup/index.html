@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=390, initial-scale=1.0">
+  <title>Cortisol Tracker — Mockup</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="iphone-frame">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="status-time">9:41</span>
+      <div class="status-icons">
+        <span>&#9679;&#9679;&#9679;&#9679;</span>
+        <span>WiFi</span>
+        <span>100%</span>
+      </div>
+    </div>
+
+    <!-- Screen Container -->
+    <div class="screen-container">
+      <!-- Dashboard Screen -->
+      <div class="screen active" id="screen-dashboard">
+        <div class="screen-scroll">
+          <div class="top-bar">
+            <div>
+              <div class="greeting">Good morning,</div>
+              <div class="greeting-name">Alex</div>
+            </div>
+            <button class="icon-btn">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            </button>
+          </div>
+
+          <!-- Stress Gauge Card -->
+          <div class="card stress-card">
+            <div class="card-label">Current Stress</div>
+            <div class="gauge-container">
+              <svg class="gauge" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#E5E7EB" stroke-width="10"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="url(#gaugeGradient)" stroke-width="10" stroke-dasharray="100 214" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+                <defs>
+                  <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#A8E6CF"/>
+                    <stop offset="100%" stop-color="#2D9F8F"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="gauge-value">32</div>
+            </div>
+            <div class="stress-label stress-low">Low — Nice!</div>
+          </div>
+
+          <!-- Vitals Row -->
+          <div class="section-header">Vitals</div>
+          <div class="vitals-row">
+            <div class="vital-card vital-pulse">
+              <div class="vital-icon">&#9829;</div>
+              <div class="vital-value">72</div>
+              <div class="vital-label">BPM</div>
+            </div>
+            <div class="vital-card vital-breathing">
+              <div class="vital-icon">&#127907;</div>
+              <div class="vital-value">16</div>
+              <div class="vital-label">br/min</div>
+            </div>
+            <div class="vital-card vital-bp">
+              <div class="vital-icon">&#129656;</div>
+              <div class="vital-value">120/80</div>
+              <div class="vital-label">mmHg</div>
+            </div>
+          </div>
+
+          <!-- Take Reading Button -->
+          <button class="btn-primary" onclick="showScreen('screen-scan')">Take Reading</button>
+
+          <!-- Today's Log -->
+          <div class="section-header">Today's Log</div>
+          <div class="card log-card">
+            <div class="log-item">
+              <span class="log-icon">&#128564;</span>
+              <span class="log-text">Sleep: 7.5h</span>
+            </div>
+            <div class="log-item">
+              <span class="log-icon">&#129367;</span>
+              <span class="log-text">Diet: Good</span>
+            </div>
+            <div class="log-item">
+              <span class="log-icon">&#127939;</span>
+              <span class="log-text">Exercise: 30min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calendar Screen -->
+      <div class="screen" id="screen-calendar">
+        <div class="screen-scroll">
+          <div class="top-bar">
+            <div class="page-title">March 2026</div>
+            <div class="nav-arrows">
+              <button class="icon-btn-sm">&lsaquo;</button>
+              <button class="icon-btn-sm">&rsaquo;</button>
+            </div>
+          </div>
+
+          <div class="calendar-grid">
+            <div class="cal-header">M</div>
+            <div class="cal-header">T</div>
+            <div class="cal-header">W</div>
+            <div class="cal-header">T</div>
+            <div class="cal-header">F</div>
+            <div class="cal-header">S</div>
+            <div class="cal-header">S</div>
+            <!-- Empty days -->
+            <div class="cal-day empty"></div>
+            <div class="cal-day empty"></div>
+            <div class="cal-day empty"></div>
+            <div class="cal-day empty"></div>
+            <div class="cal-day empty"></div>
+            <div class="cal-day empty"></div>
+            <div class="cal-day"><span>1</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day"><span>2</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day"><span>3</span><span class="cal-dot dot-moderate"></span></div>
+            <div class="cal-day"><span>4</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day"><span>5</span><span class="cal-dot dot-elevated"></span></div>
+            <div class="cal-day"><span>6</span><span class="cal-dot dot-moderate"></span></div>
+            <div class="cal-day"><span>7</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day"><span>8</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day"><span>9</span><span class="cal-dot dot-moderate"></span></div>
+            <div class="cal-day"><span>10</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day"><span>11</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day"><span>12</span><span class="cal-dot dot-high"></span></div>
+            <div class="cal-day"><span>13</span><span class="cal-dot dot-moderate"></span></div>
+            <div class="cal-day"><span>14</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day selected"><span>15</span><span class="cal-dot dot-moderate"></span></div>
+            <div class="cal-day"><span>16</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day"><span>17</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day"><span>18</span><span class="cal-dot dot-moderate"></span></div>
+            <div class="cal-day"><span>19</span><span class="cal-dot dot-elevated"></span></div>
+            <div class="cal-day"><span>20</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day"><span>21</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day"><span>22</span><span class="cal-dot dot-moderate"></span></div>
+            <div class="cal-day"><span>23</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day"><span>24</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day"><span>25</span><span class="cal-dot dot-moderate"></span></div>
+            <div class="cal-day"><span>26</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day"><span>27</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day today"><span>28</span><span class="cal-dot dot-low"></span></div>
+            <div class="cal-day"><span>29</span></div>
+            <div class="cal-day"><span>30</span></div>
+            <div class="cal-day"><span>31</span></div>
+          </div>
+
+          <!-- Selected Day Detail -->
+          <div class="card day-detail-card">
+            <div class="day-detail-header">
+              <div class="day-detail-title">March 15</div>
+              <div class="day-detail-avg">Avg Stress: <strong>38</strong></div>
+            </div>
+            <div class="divider"></div>
+            <div class="reading-item">
+              <span class="reading-time">9:00 AM</span>
+              <span class="reading-value">32</span>
+              <span class="reading-badge badge-low">Low</span>
+            </div>
+            <div class="reading-item">
+              <span class="reading-time">2:00 PM</span>
+              <span class="reading-value">45</span>
+              <span class="reading-badge badge-moderate">Mod</span>
+            </div>
+            <div class="reading-item">
+              <span class="reading-time">8:00 PM</span>
+              <span class="reading-value">28</span>
+              <span class="reading-badge badge-low">Low</span>
+            </div>
+          </div>
+
+          <!-- Logged Activities -->
+          <div class="section-header">Logged Activities</div>
+          <div class="card log-card">
+            <button class="add-entry-btn">+ Add entry</button>
+            <div class="log-item">
+              <span class="log-icon">&#128564;</span>
+              <span class="log-text">Slept 6h</span>
+            </div>
+            <div class="log-item">
+              <span class="log-icon">&#9749;</span>
+              <span class="log-text">3 coffees</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Friends Screen -->
+      <div class="screen" id="screen-friends">
+        <div class="screen-scroll">
+          <div class="top-bar">
+            <div class="page-title">Friends</div>
+            <button class="icon-btn-sm add-btn">+</button>
+          </div>
+
+          <div class="card friend-card">
+            <div class="friend-avatar">S</div>
+            <div class="friend-info">
+              <div class="friend-name">Sarah</div>
+              <div class="friend-meta">Last: 28 &middot; 2h ago</div>
+            </div>
+            <div class="friend-status">
+              <span class="status-dot dot-low"></span>
+              <span class="status-text">Low</span>
+            </div>
+          </div>
+
+          <div class="card friend-card">
+            <div class="friend-avatar" style="background:#FFD93D;color:#1A1A2E;">M</div>
+            <div class="friend-info">
+              <div class="friend-name">Marcus</div>
+              <div class="friend-meta">Last: 42 &middot; 30m ago</div>
+            </div>
+            <div class="friend-status">
+              <span class="status-dot dot-moderate"></span>
+              <span class="status-text">Moderate</span>
+            </div>
+          </div>
+
+          <div class="card friend-card">
+            <div class="friend-avatar" style="background:#5B9BD5;">J</div>
+            <div class="friend-info">
+              <div class="friend-name">Jamie</div>
+              <div class="friend-meta">Last: 22 &middot; 1h ago</div>
+            </div>
+            <div class="friend-status">
+              <span class="status-dot dot-low"></span>
+              <span class="status-text">Low</span>
+            </div>
+          </div>
+
+          <!-- Leaderboard -->
+          <div class="section-header">Leaderboard <span class="section-sub">(weekly avg)</span></div>
+          <div class="card leaderboard-card">
+            <div class="lb-row lb-gold">
+              <span class="lb-rank">&#129351;</span>
+              <span class="lb-name">You</span>
+              <span class="lb-score">31</span>
+            </div>
+            <div class="lb-row lb-silver">
+              <span class="lb-rank">&#129352;</span>
+              <span class="lb-name">Sarah</span>
+              <span class="lb-score">33</span>
+            </div>
+            <div class="lb-row lb-bronze">
+              <span class="lb-rank">&#129353;</span>
+              <span class="lb-name">Jamie</span>
+              <span class="lb-score">35</span>
+            </div>
+            <div class="lb-row">
+              <span class="lb-rank">4</span>
+              <span class="lb-name">Marcus</span>
+              <span class="lb-score">41</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips Screen -->
+      <div class="screen" id="screen-tips">
+        <div class="screen-scroll">
+          <div class="top-bar">
+            <div class="page-title">Your Tips</div>
+            <button class="icon-btn-sm">&#8635;</button>
+          </div>
+
+          <div class="tips-subtitle">Based on your patterns:</div>
+
+          <div class="card tip-card">
+            <div class="tip-icon">&#128161;</div>
+            <div class="tip-text">Your stress peaks around <strong>2pm on weekdays</strong>. Try a 10-minute walk after lunch.</div>
+          </div>
+
+          <div class="card tip-card">
+            <div class="tip-icon">&#127769;</div>
+            <div class="tip-text">On nights you sleep <strong>7+ hours</strong>, your morning cortisol is <strong>23% lower</strong>.</div>
+          </div>
+
+          <div class="card tip-card">
+            <div class="tip-icon">&#9749;</div>
+            <div class="tip-text">Days with <strong>3+ coffees</strong> show elevated afternoon stress. Consider switching to tea after noon.</div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="section-header">Quick Actions</div>
+          <div class="quick-actions">
+            <div class="quick-action-btn">
+              <div class="qa-icon">&#129495;</div>
+              <div class="qa-label">Calm</div>
+            </div>
+            <div class="quick-action-btn">
+              <div class="qa-icon">&#129723;</div>
+              <div class="qa-label">Breathe</div>
+            </div>
+            <div class="quick-action-btn">
+              <div class="qa-icon">&#128221;</div>
+              <div class="qa-label">Journal</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scan Flow Screen -->
+      <div class="screen" id="screen-scan">
+        <div class="screen-scroll">
+          <div class="top-bar">
+            <button class="back-btn" onclick="showScreen('screen-dashboard')">&larr; Back</button>
+          </div>
+
+          <div class="scan-content">
+            <div class="scan-title">Get ready to scan</div>
+            <div class="scan-subtitle">Hold your phone steady and look at the camera</div>
+
+            <div class="camera-placeholder">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+              </svg>
+              <div class="camera-label">SmartSpectra Camera View</div>
+            </div>
+
+            <div class="scan-progress">
+              <div class="scan-status">Scanning... 18s remaining</div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 40%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Post-scan results (shown together for mockup) -->
+          <div class="divider" style="margin: 24px 0"></div>
+          <div class="scan-results-label">After scan completes:</div>
+
+          <div class="card stress-card" style="margin-top: 16px">
+            <div class="card-label">Your Results</div>
+            <div class="gauge-container">
+              <svg class="gauge" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#E5E7EB" stroke-width="10"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="url(#gaugeGradient2)" stroke-width="10" stroke-dasharray="100 214" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+                <defs>
+                  <linearGradient id="gaugeGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#A8E6CF"/>
+                    <stop offset="100%" stop-color="#2D9F8F"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="gauge-value">32</div>
+            </div>
+            <div class="stress-label stress-low">Low — Nice!</div>
+          </div>
+
+          <div class="vitals-row">
+            <div class="vital-card vital-pulse">
+              <div class="vital-icon">&#9829;</div>
+              <div class="vital-value">72</div>
+              <div class="vital-label">BPM</div>
+            </div>
+            <div class="vital-card vital-breathing">
+              <div class="vital-icon">&#127907;</div>
+              <div class="vital-value">16</div>
+              <div class="vital-label">br/min</div>
+            </div>
+            <div class="vital-card vital-bp">
+              <div class="vital-icon">&#129656;</div>
+              <div class="vital-value">120/80</div>
+              <div class="vital-label">mmHg</div>
+            </div>
+          </div>
+
+          <button class="btn-primary">Save Reading</button>
+          <button class="btn-secondary">Scan Again</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <button class="tab active" onclick="showScreen('screen-dashboard')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span>Dashboard</span>
+      </button>
+      <button class="tab" onclick="showScreen('screen-calendar')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Calendar</span>
+      </button>
+      <button class="tab" onclick="showScreen('screen-friends')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Friends</span>
+      </button>
+      <button class="tab" onclick="showScreen('screen-tips')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>
+        <span>Tips</span>
+      </button>
+    </div>
+
+    <!-- Home Indicator -->
+    <div class="home-indicator"></div>
+  </div>
+
+  <script>
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+
+      // Update tab active state
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(t => t.classList.remove('active'));
+
+      const tabMap = {
+        'screen-dashboard': 0,
+        'screen-calendar': 1,
+        'screen-friends': 2,
+        'screen-tips': 3
+      };
+
+      if (tabMap[id] !== undefined) {
+        tabs[tabMap[id]].classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>
