@@ -6,14 +6,8 @@ struct FriendsView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                if viewModel.friends.isEmpty && !viewModel.isLoading {
-                    ContentUnavailableView(
-                        "No Friends Yet",
-                        systemImage: "person.2.slash",
-                        description: Text("Add friends to see their stress levels")
-                    )
-                }
+            ZStack {
+                Color(hex: "F2F2F7").ignoresSafeArea()
 
                 ForEach(viewModel.friends) { friend in
                     NavigationLink {
@@ -30,23 +24,15 @@ struct FriendsView: View {
                         showSearch = true
                     } label: {
                         Image(systemName: "person.badge.plus")
+                            .foregroundStyle(Color(hex: "1A6B5C"))
                     }
                 }
             }
             .sheet(isPresented: $showSearch) {
                 SearchFriendsSheet(viewModel: viewModel)
             }
-            .task {
-                await viewModel.loadFriends()
-            }
-            .refreshable {
-                await viewModel.loadFriends()
-            }
-            .overlay {
-                if viewModel.isLoading {
-                    ProgressView()
-                }
-            }
+            .task { await viewModel.loadFriends() }
+            .refreshable { await viewModel.loadFriends() }
         }
     }
 }
@@ -72,14 +58,17 @@ struct FriendRow: View {
                         .foregroundStyle(avatarColor)
                 }
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 3) {
                 Text(friend.displayName)
-                    .font(.body.weight(.medium))
-
+                    .font(.body.weight(.semibold))
                 if let time = friend.latestReadingTime {
                     Text(time, style: .relative)
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                } else {
+                    Text("No readings yet")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
                 }
 
                 // Share status badge
@@ -93,20 +82,19 @@ struct FriendRow: View {
             Spacer()
 
             if let category = friend.stressCategory {
-                VStack(alignment: .trailing) {
+                VStack(alignment: .trailing, spacing: 2) {
                     Text(category.emoji)
-                        .font(.title3)
+                        .font(.title2)
                     Text(category.rawValue)
-                        .font(.caption2)
+                        .font(.caption2.weight(.medium))
                         .foregroundStyle(.secondary)
                 }
-            } else {
-                Text("No data")
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
             }
         }
-        .padding(.vertical, 4)
+        .padding()
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
     }
 }
 
@@ -259,33 +247,36 @@ struct SearchFriendsSheet: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                if viewModel.searchResults.isEmpty && !viewModel.searchQuery.isEmpty && !viewModel.isSearching {
-                    ContentUnavailableView.search(text: viewModel.searchQuery)
-                }
+            ZStack {
+                Color(hex: "F2F2F7").ignoresSafeArea()
 
-                ForEach(viewModel.searchResults) { user in
-                    HStack {
-                        Circle()
-                            .fill(.deepTeal.opacity(0.2))
-                            .frame(width: 36, height: 36)
-                            .overlay {
+                List {
+                    if viewModel.searchResults.isEmpty && !viewModel.searchQuery.isEmpty && !viewModel.isSearching {
+                        ContentUnavailableView.search(text: viewModel.searchQuery)
+                    }
+
+                    ForEach(viewModel.searchResults) { user in
+                        HStack(spacing: 12) {
+                            ZStack {
+                                Circle()
+                                    .fill(LinearGradient(colors: [Color(hex: "1A6B5C"), Color(hex: "2D9F8F")],
+                                                         startPoint: .topLeading, endPoint: .bottomTrailing))
+                                    .frame(width: 40, height: 40)
                                 Text(String(user.displayName.prefix(1)).uppercased())
-                                    .font(.subheadline)
-                                    .foregroundStyle(.deepTeal)
+                                    .font(.subheadline.weight(.semibold))
+                                    .foregroundStyle(.white)
                             }
-
-                        Text(user.displayName)
-                            .font(.body)
-
-                        Spacer()
-
-                        Button {
-                            Task { await viewModel.addFriend(user) }
-                        } label: {
-                            Image(systemName: "plus.circle.fill")
-                                .foregroundStyle(.deepTeal)
+                            Text(user.displayName).font(.body)
+                            Spacer()
+                            Button {
+                                Task { await viewModel.addFriend(user) }
+                            } label: {
+                                Image(systemName: "plus.circle.fill")
+                                    .font(.title2)
+                                    .foregroundStyle(Color(hex: "1A6B5C"))
+                            }
                         }
+                        .padding(.vertical, 4)
                     }
                 }
             }
@@ -298,6 +289,7 @@ struct SearchFriendsSheet: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Done") { dismiss() }
+                        .foregroundStyle(Color(hex: "1A6B5C"))
                 }
             }
         }
