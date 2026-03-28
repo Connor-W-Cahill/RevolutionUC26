@@ -82,6 +82,30 @@ Currently returns hardcoded wellness tips (AI integration planned later).
 ### `dailyTipsGeneration` (scheduled)
 Runs at 8am UTC daily. Refreshes tips for all users.
 
+### `sendFriendRequest` (callable)
+**Input:** `{ targetUserID: string }`
+**Returns:** `{ friendshipID: string, status: "pending" }`
+- Creates a friendship doc with status "pending"
+- Prevents duplicate requests and self-friending
+- Allows re-sending after a declined request
+
+### `respondToFriendRequest` (callable)
+**Input:** `{ friendshipID: string, action: "accept" | "decline" }`
+**Returns:** `{ status: "accepted" | "declined" }`
+- Only the non-initiator can respond
+- On accept: updates both users' `friendIDs[]` arrays via batch write
+
+### `getFriendRequests` (callable)
+No input params — uses auth UID.
+**Returns:** `{ incoming: [{ friendshipID, fromUserID, createdAt }], outgoing: [{ friendshipID, toUserID, createdAt }] }`
+
+### `getWeeklyTrends` (callable)
+No input params — uses auth UID.
+**Returns:** `{ trends: DayTrend[] }` — 7 entries, one per day (oldest to newest).
+```
+DayTrend: { date: string, avgPulseRate: number|null, avgBreathingRate: number|null, readingCount: number }
+```
+
 ## Presage SDK Metrics Mapping
 ```
 metrics.pulse.strict.value       → readings.pulseRate
