@@ -6,30 +6,35 @@ struct CalendarView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 20) {
-                    // Date Picker
-                    DatePicker("Select Date", selection: $viewModel.selectedDate, displayedComponents: .date)
-                        .datePickerStyle(.graphical)
-                        .tint(.deepTeal)
-                        .onChange(of: viewModel.selectedDate) { _, newDate in
-                            Task { await viewModel.loadData(for: newDate) }
+            ZStack {
+                Color(hex: "F2F2F7").ignoresSafeArea()
+
+                ScrollView {
+                    VStack(spacing: 16) {
+                        // Calendar
+                        DatePicker("Select Date", selection: $viewModel.selectedDate, displayedComponents: .date)
+                            .datePickerStyle(.graphical)
+                            .tint(Color(hex: "1A6B5C"))
+                            .padding()
+                            .background(Color.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
+                            .onChange(of: viewModel.selectedDate) { _, newDate in
+                                Task { await viewModel.loadData(for: newDate) }
+                            }
+
+                        if let avg = viewModel.averageStress {
+                            dailySummary(averageStress: avg)
                         }
 
-                    // Daily Summary
-                    if let avg = viewModel.averageStress {
-                        dailySummary(averageStress: avg)
-                    }
+                        if !viewModel.readings.isEmpty {
+                            readingsSection
+                        }
 
-                    // Readings
-                    if !viewModel.readings.isEmpty {
-                        readingsSection
+                        activitiesSection
                     }
-
-                    // Activities
-                    activitiesSection
+                    .padding()
                 }
-                .padding()
             }
             .navigationTitle("Calendar")
             .toolbar {
@@ -37,47 +42,52 @@ struct CalendarView: View {
                     Button {
                         showAddActivity = true
                     } label: {
-                        Image(systemName: "plus")
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundStyle(Color(hex: "1A6B5C"))
                     }
                 }
             }
             .sheet(isPresented: $showAddActivity) {
                 AddActivitySheet(viewModel: viewModel)
             }
-            .task {
-                await viewModel.loadData(for: viewModel.selectedDate)
-            }
+            .task { await viewModel.loadData(for: viewModel.selectedDate) }
         }
     }
 
     private func dailySummary(averageStress: Double) -> some View {
-        HStack {
-            VStack(alignment: .leading) {
+        HStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text("Daily Average")
-                    .font(.subheadline)
+                    .font(.caption)
                     .foregroundStyle(.secondary)
                 Text("Stress: \(Int(averageStress))")
                     .font(.title2.weight(.bold))
             }
             Spacer()
-            Text("\(viewModel.readings.count) readings")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+            VStack(alignment: .trailing, spacing: 4) {
+                Text("\(viewModel.readings.count)")
+                    .font(.title2.weight(.bold))
+                    .foregroundStyle(Color(hex: "1A6B5C"))
+                Text("readings")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
         .padding()
-        .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
     }
 
     private var readingsSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 12) {
             Text("Readings")
                 .font(.headline)
-
             ForEach(viewModel.readings) { reading in
-                HStack {
+                HStack(spacing: 12) {
                     Text(reading.stressCategory.emoji)
-                    VStack(alignment: .leading) {
+                        .font(.title3)
+                    VStack(alignment: .leading, spacing: 2) {
                         Text("Stress: \(Int(reading.stressLevel))")
                             .font(.subheadline.weight(.medium))
                         Text(reading.timestamp, style: .time)
@@ -85,7 +95,7 @@ struct CalendarView: View {
                             .foregroundStyle(.secondary)
                     }
                     Spacer()
-                    VStack(alignment: .trailing) {
+                    VStack(alignment: .trailing, spacing: 2) {
                         Text("\(Int(reading.heartRate)) bpm")
                         Text("HRV: \(Int(reading.hrv))ms")
                     }
@@ -93,32 +103,46 @@ struct CalendarView: View {
                     .foregroundStyle(.secondary)
                 }
                 .padding(.vertical, 4)
-                Divider()
+                if reading.id != viewModel.readings.last?.id { Divider() }
             }
         }
         .padding()
-        .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
     }
 
     private var activitiesSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 12) {
             Text("Activities")
                 .font(.headline)
 
             if viewModel.activities.isEmpty {
-                Text("No activities logged")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity)
-                    .padding()
+                HStack {
+                    Spacer()
+                    VStack(spacing: 8) {
+                        Image(systemName: "list.bullet.clipboard")
+                            .font(.system(size: 32))
+                            .foregroundStyle(Color(hex: "2D9F8F").opacity(0.5))
+                        Text("No activities logged")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.vertical, 16)
+                    Spacer()
+                }
             } else {
                 ForEach(viewModel.activities) { activity in
-                    HStack {
-                        Image(systemName: activity.category.icon)
-                            .foregroundStyle(.softTeal)
-                            .frame(width: 30)
-                        VStack(alignment: .leading) {
+                    HStack(spacing: 12) {
+                        ZStack {
+                            Circle()
+                                .fill(Color(hex: "1A6B5C").opacity(0.1))
+                                .frame(width: 36, height: 36)
+                            Image(systemName: activity.category.icon)
+                                .font(.subheadline)
+                                .foregroundStyle(Color(hex: "1A6B5C"))
+                        }
+                        VStack(alignment: .leading, spacing: 2) {
                             Text(activity.title)
                                 .font(.subheadline.weight(.medium))
                             if let notes = activity.notes {
@@ -140,13 +164,14 @@ struct CalendarView: View {
                         }
                     }
                     .padding(.vertical, 4)
-                    Divider()
+                    if activity.id != viewModel.activities.last?.id { Divider() }
                 }
             }
         }
         .padding()
-        .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
     }
 }
 
@@ -167,15 +192,13 @@ struct AddActivitySheet: View {
                         Label(cat.rawValue, systemImage: cat.icon).tag(cat)
                     }
                 }
-
                 TextField("Title", text: $title)
-
                 TextField("Notes (optional)", text: $notes)
-
                 Stepper("Rating: \(rating)/5", value: $rating, in: 1...5)
             }
             .navigationTitle("Log Activity")
             .navigationBarTitleDisplayMode(.inline)
+            .tint(Color(hex: "1A6B5C"))
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
