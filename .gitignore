@@ -1,0 +1,38 @@
+# Environment
+.env
+*.env.local
+*.env.*.local
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Node / Cloud Functions
+functions/node_modules/
+functions/lib/
+node_modules/
+
+# iOS / Xcode
+CortisolTracker.xcodeproj/xcuserdata/
+CortisolTracker.xcworkspace/xcuserdata/
+CortisolTracker.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+*.xcuserstate
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+Pods/
+.build/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+npm-debug.log*
