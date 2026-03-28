@@ -33,6 +33,11 @@ Pods/
 # VS Code
 .vscode/
 
+# AI / Claude Code
+CLAUDE.md
+context/
+.claude/
+
 # Logs
 *.log
 npm-debug.log*
