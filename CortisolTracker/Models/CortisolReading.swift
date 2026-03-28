@@ -1,5 +1,11 @@
 import Foundation
 
+enum ReadingSource: String, Codable {
+    case presage = "presage"
+    case manual = "manual"
+    case imported = "imported"
+}
+
 struct CortisolReading: Identifiable, Codable {
     var id: String
     var userID: String
@@ -9,6 +15,8 @@ struct CortisolReading: Identifiable, Codable {
     var hrv: Double                // ms (heart rate variability)
     var spO2: Double               // percentage
     var respiratoryRate: Double    // breaths per minute
+    var source: ReadingSource?
+    var isSpikeCandidate: Bool?
 
     var stressCategory: StressCategory {
         switch stressLevel {
@@ -20,7 +28,8 @@ struct CortisolReading: Identifiable, Codable {
     }
 
     init(id: String = UUID().uuidString, userID: String, timestamp: Date = Date(),
-         stressLevel: Double, heartRate: Double, hrv: Double, spO2: Double, respiratoryRate: Double) {
+         stressLevel: Double, heartRate: Double, hrv: Double, spO2: Double,
+         respiratoryRate: Double, source: ReadingSource? = nil) {
         self.id = id
         self.userID = userID
         self.timestamp = timestamp
@@ -29,6 +38,7 @@ struct CortisolReading: Identifiable, Codable {
         self.hrv = hrv
         self.spO2 = spO2
         self.respiratoryRate = respiratoryRate
+        self.source = source
     }
 }
 

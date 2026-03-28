@@ -6,13 +6,16 @@ struct Tip: Identifiable, Codable {
     var body: String
     var category: TipCategory
     var createdAt: String
+    var suggestedTime: String?   // ISO datetime string for time-anchored tips
 
-    init(id: String = UUID().uuidString, title: String, body: String, category: TipCategory, createdAt: String = "") {
+    init(id: String = UUID().uuidString, title: String, body: String,
+         category: TipCategory, createdAt: String = "", suggestedTime: String? = nil) {
         self.id = id
         self.title = title
         self.body = body
         self.category = category
         self.createdAt = createdAt
+        self.suggestedTime = suggestedTime
     }
 }
 

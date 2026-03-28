@@ -5,6 +5,7 @@ class FriendsViewModel: ObservableObject {
     @Published var friends: [Friend] = []
     @Published var searchResults: [Friend] = []
     @Published var searchQuery = ""
+    @Published var shares: [String: Share] = [:]  // keyed by viewerID (friend's ID)
     @Published var isLoading = false
     @Published var isSearching = false
     @Published var error: String?
@@ -20,7 +21,10 @@ class FriendsViewModel: ObservableObject {
             let user = try await firebase.fetchUser(id: userID)
             var loadedFriends = try await firebase.fetchFriends(friendIDs: user.friendIDs)
 
-            // Fetch latest reading for each friend concurrently
+            // Fetch latest reading and share status for each friend concurrently
+            let loadedShares = try await firebase.fetchMyShares()
+            shares = Dictionary(uniqueKeysWithValues: loadedShares.map { ($0.viewerID, $0) })
+
             await withTaskGroup(of: (String, CortisolReading?).self) { group in
                 for friend in loadedFriends {
                     group.addTask {
@@ -70,6 +74,33 @@ class FriendsViewModel: ObservableObject {
             try await firebase.addFriend(userID: userID, friendID: friend.id)
             friends.append(friend)
             searchResults.removeAll { $0.id == friend.id }
+        } catch {
+            self.error = error.localizedDescription
+        }
+    }
+
+    func share(with friend: Friend) -> Share? {
+        shares[friend.id]
+    }
+
+    func updateShare(for friend: Friend, permissions: Share.SharePermissions) async {
+        do {
+            try await firebase.setShare(viewerID: friend.id, permissions: permissions)
+            let newShare = Share(
+                ownerID: firebase.currentUserID ?? "",
+                viewerID: friend.id,
+                permissions: permissions
+            )
+            shares[friend.id] = newShare
+        } catch {
+            self.error = error.localizedDescription
+        }
+    }
+
+    func revokeShare(for friend: Friend) async {
+        do {
+            try await firebase.revokeShare(viewerID: friend.id)
+            shares[friend.id] = nil
         } catch {
             self.error = error.localizedDescription
         }

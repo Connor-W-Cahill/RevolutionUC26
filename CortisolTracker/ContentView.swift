@@ -26,12 +26,19 @@ struct ContentView: View {
                 }
                 .tag(2)
 
+            GroupsView()
+                .tabItem {
+                    Image(systemName: "person.3")
+                    Text("Groups")
+                }
+                .tag(3)
+
             TipsView()
                 .tabItem {
                     Image(systemName: selectedTab == 3 ? "lightbulb.fill" : "lightbulb")
                     Text("Tips")
                 }
-                .tag(3)
+                .tag(4)
         }
         .tint(Color(hex: "1A6B5C"))
     }
