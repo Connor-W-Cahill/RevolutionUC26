@@ -51,15 +51,16 @@ struct FriendRow: View {
     let friend: Friend
 
     var body: some View {
+        let avatarColor: Color = friend.stressCategory?.brandColor ?? .deepTeal
         HStack(spacing: 12) {
             // Avatar
             Circle()
-                .fill(.purple.opacity(0.2))
+                .fill(avatarColor.opacity(0.2))
                 .frame(width: 44, height: 44)
                 .overlay {
                     Text(String(friend.displayName.prefix(1)).uppercased())
                         .font(.headline)
-                        .foregroundStyle(.purple)
+                        .foregroundStyle(avatarColor)
                 }
 
             VStack(alignment: .leading, spacing: 2) {
@@ -107,12 +108,12 @@ struct SearchFriendsSheet: View {
                 ForEach(viewModel.searchResults) { user in
                     HStack {
                         Circle()
-                            .fill(.purple.opacity(0.2))
+                            .fill(.deepTeal.opacity(0.2))
                             .frame(width: 36, height: 36)
                             .overlay {
                                 Text(String(user.displayName.prefix(1)).uppercased())
                                     .font(.subheadline)
-                                    .foregroundStyle(.purple)
+                                    .foregroundStyle(.deepTeal)
                             }
 
                         Text(user.displayName)
@@ -124,7 +125,7 @@ struct SearchFriendsSheet: View {
                             Task { await viewModel.addFriend(user) }
                         } label: {
                             Image(systemName: "plus.circle.fill")
-                                .foregroundStyle(.purple)
+                                .foregroundStyle(.deepTeal)
                         }
                     }
                 }

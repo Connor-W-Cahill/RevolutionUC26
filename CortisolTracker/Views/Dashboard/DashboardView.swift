@@ -4,6 +4,13 @@ struct DashboardView: View {
     @StateObject private var viewModel = DashboardViewModel()
     @EnvironmentObject var authViewModel: AuthViewModel
 
+    private var greetingTitle: String {
+        let hour = Calendar.current.component(.hour, from: Date())
+        let first = authViewModel.user?.displayName.components(separatedBy: " ").first ?? ""
+        let base = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening"
+        return first.isEmpty ? base : "\(base), \(first)"
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -26,8 +33,12 @@ struct DashboardView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Dashboard")
+            .navigationTitle(greetingTitle)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Image(systemName: "bell")
+                        .foregroundStyle(.deepTeal)
+                }
                 ToolbarItem(placement: .primaryAction) {
                     Menu {
                         if let user = authViewModel.user {
@@ -106,7 +117,7 @@ struct DashboardView: View {
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
             .padding()
-            .background(viewModel.presage.isScanning ? Color.gray : Color.purple)
+            .background(viewModel.presage.isScanning ? Color.gray : Color.deepTeal)
             .clipShape(RoundedRectangle(cornerRadius: 16))
         }
         .disabled(viewModel.presage.isScanning)
@@ -114,10 +125,10 @@ struct DashboardView: View {
 
     private func vitalsGrid(reading: CortisolReading) -> some View {
         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-            VitalCard(title: "Heart Rate", value: "\(Int(reading.heartRate))", unit: "bpm", icon: "heart.fill", color: .red)
-            VitalCard(title: "HRV", value: "\(Int(reading.hrv))", unit: "ms", icon: "waveform.path.ecg", color: .blue)
-            VitalCard(title: "SpO2", value: "\(Int(reading.spO2))", unit: "%", icon: "lungs.fill", color: .cyan)
-            VitalCard(title: "Resp Rate", value: "\(Int(reading.respiratoryRate))", unit: "br/min", icon: "wind", color: .green)
+            VitalCard(title: "Heart Rate", value: "\(Int(reading.heartRate))", unit: "bpm", icon: "heart.fill", color: .warmCoral)
+            VitalCard(title: "HRV", value: "\(Int(reading.hrv))", unit: "ms", icon: "waveform.path.ecg", color: .calmBlue)
+            VitalCard(title: "SpO2", value: "\(Int(reading.spO2))", unit: "%", icon: "lungs.fill", color: .softTeal)
+            VitalCard(title: "Resp Rate", value: "\(Int(reading.respiratoryRate))", unit: "br/min", icon: "wind", color: .deepTeal)
         }
     }
 
@@ -158,12 +169,7 @@ struct DashboardView: View {
     }
 
     private func stressColor(for category: StressCategory) -> Color {
-        switch category {
-        case .low: return .green
-        case .moderate: return .yellow
-        case .high: return .orange
-        case .veryHigh: return .red
-        }
+        category.brandColor
     }
 }
 

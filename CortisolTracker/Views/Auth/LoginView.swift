@@ -16,7 +16,7 @@ struct LoginView: View {
                 VStack(spacing: 8) {
                     Image(systemName: "heart.text.square.fill")
                         .font(.system(size: 64))
-                        .foregroundStyle(.purple)
+                        .foregroundStyle(.deepTeal)
                     Text("Cortisol Tracker")
                         .font(.largeTitle.weight(.bold))
                     Text("Track your stress, improve your life")
@@ -58,7 +58,7 @@ struct LoginView: View {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.purple)
+                .background(Color.deepTeal)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .disabled(email.isEmpty || password.isEmpty || authViewModel.isLoading)
 

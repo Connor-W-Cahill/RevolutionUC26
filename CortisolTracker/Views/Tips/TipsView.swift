@@ -43,15 +43,15 @@ struct TipCard: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Image(systemName: tip.category.icon)
-                    .foregroundStyle(.purple)
+                    .foregroundStyle(.softPurple)
                     .frame(width: 28)
 
-                Text(tip.category.rawValue)
+                Text(tip.category.displayName)
                     .font(.caption)
-                    .foregroundStyle(.purple)
+                    .foregroundStyle(.softPurple)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 2)
-                    .background(.purple.opacity(0.1))
+                    .background(.softPurple.opacity(0.1))
                     .clipShape(Capsule())
 
                 Spacer()
