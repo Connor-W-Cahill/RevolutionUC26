@@ -1,66 +1,49 @@
 import Foundation
 import SwiftUI
-
-// Presage SmartSpectra SDK wrapper
-// TODO: Import actual SDK once SPM package is added:
-// import SmartSpectraSwiftSDK
+import SmartSpectraSwiftSDK
 
 class PresageService: ObservableObject {
     static let shared = PresageService()
 
-    @Published var isScanning = false
-    @Published var scanProgress: Double = 0
-    @Published var error: String?
+    let sdk = SmartSpectraSwiftSDK.shared
+    @Published var hasMeasurement = false
 
-    private init() {}
+    private init() {
+        sdk.setApiKey("BAThk0fR6M9h7pNP5wahf9uPo9BV3Zlr5x7S71ny")
+        sdk.setSmartSpectraMode(.spot)
+        sdk.setMeasurementDuration(30.0)
+        sdk.setCameraPosition(.front)
+        sdk.setRecordingDelay(3)
+        sdk.setShowFps(false)
+    }
 
-    /// Start a cortisol/vitals scan using the Presage SmartSpectra SDK.
-    /// The SDK uses the front camera to measure vitals via PPG.
-    /// Returns a CortisolReading with all measured vitals.
-    func startScan(userID: String) async throws -> CortisolReading {
-        await MainActor.run {
-            isScanning = true
-            scanProgress = 0
-            error = nil
+    /// Extract a CortisolReading from the latest SDK metricsBuffer.
+    /// Call this after the SDK measurement completes (metricsBuffer is populated).
+    func extractReading(userID: String) -> CortisolReading? {
+        guard let metrics = sdk.metricsBuffer, metrics.isInitialized else {
+            return nil
         }
 
-        defer {
-            Task { @MainActor in
-                isScanning = false
-                scanProgress = 0
-            }
-        }
+        let pulseRate = Double(metrics.pulse.strict.value)
+        let breathingRate = Double(metrics.breathing.strict.value)
 
-        // TODO: Replace with actual Presage SDK calls:
-        //
-        // let config = SmartSpectraConfig(apiKey: "YOUR_API_KEY")
-        // let session = try SmartSpectraSession(config: config)
-        // let result = try await session.startMeasurement()
-        //
-        // return CortisolReading(
-        //     userID: userID,
-        //     stressLevel: result.stressLevel,
-        //     heartRate: result.heartRate,
-        //     hrv: result.hrv,
-        //     spO2: result.spO2,
-        //     respiratoryRate: result.respiratoryRate
-        // )
+        guard pulseRate > 0, breathingRate > 0 else { return nil }
 
-        // Simulated scan for development/demo
-        for i in 1...10 {
-            try await Task.sleep(nanoseconds: 300_000_000)
-            await MainActor.run {
-                scanProgress = Double(i) / 10.0
-            }
+        // Extract blood pressure if available
+        var systolic: Double?
+        var diastolic: Double?
+        let bpPhasic = metrics.bloodPressure.phasic
+        if !bpPhasic.isEmpty {
+            // Use the latest phasic BP value as systolic estimate
+            systolic = Double(bpPhasic.last?.value ?? 0)
         }
 
         return CortisolReading(
             userID: userID,
-            stressLevel: Double.random(in: 10...80),
-            heartRate: Double.random(in: 60...100),
-            hrv: Double.random(in: 20...80),
-            spO2: Double.random(in: 95...100),
-            respiratoryRate: Double.random(in: 12...20)
+            pulseRate: pulseRate,
+            breathingRate: breathingRate,
+            bloodPressureSystolic: systolic,
+            bloodPressureDiastolic: diastolic
         )
     }
 }

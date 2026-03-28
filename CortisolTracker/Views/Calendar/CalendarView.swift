@@ -86,8 +86,8 @@ struct CalendarView: View {
                     }
                     Spacer()
                     VStack(alignment: .trailing) {
-                        Text("\(Int(reading.heartRate)) bpm")
-                        Text("HRV: \(Int(reading.hrv))ms")
+                        Text("\(Int(reading.pulseRate)) bpm")
+                        Text("\(Int(reading.breathingRate)) br/min")
                     }
                     .font(.caption)
                     .foregroundStyle(.secondary)

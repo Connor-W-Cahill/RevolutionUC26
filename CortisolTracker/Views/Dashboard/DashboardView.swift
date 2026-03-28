@@ -3,23 +3,17 @@ import SwiftUI
 struct DashboardView: View {
     @StateObject private var viewModel = DashboardViewModel()
     @EnvironmentObject var authViewModel: AuthViewModel
+    @State private var showScan = false
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    // Stress Level Card
                     stressCard
-
-                    // Scan Button
                     scanButton
-
-                    // Vitals Grid
                     if let reading = viewModel.latestReading {
                         vitalsGrid(reading: reading)
                     }
-
-                    // Today's Readings
                     if !viewModel.todayReadings.isEmpty {
                         todaySection
                     }
@@ -48,6 +42,13 @@ struct DashboardView: View {
             }
             .refreshable {
                 await viewModel.loadData()
+            }
+            .fullScreenCover(isPresented: $showScan) {
+                if let userID = viewModel.currentUserID {
+                    ScanView(userID: userID) { reading in
+                        Task { await viewModel.saveReading(reading) }
+                    }
+                }
             }
             .alert("Error", isPresented: .constant(viewModel.error != nil)) {
                 Button("OK") { viewModel.error = nil }
@@ -90,34 +91,29 @@ struct DashboardView: View {
 
     private var scanButton: some View {
         Button {
-            Task { await viewModel.startScan() }
+            showScan = true
         } label: {
             HStack {
-                if viewModel.presage.isScanning {
-                    ProgressView()
-                        .tint(.white)
-                    Text("Scanning... \(Int(viewModel.presage.scanProgress * 100))%")
-                } else {
-                    Image(systemName: "camera.viewfinder")
-                    Text("Scan Vitals")
-                }
+                Image(systemName: "camera.viewfinder")
+                Text("Scan Vitals")
             }
             .font(.headline)
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
             .padding()
-            .background(viewModel.presage.isScanning ? Color.gray : Color.purple)
+            .background(Color.purple)
             .clipShape(RoundedRectangle(cornerRadius: 16))
         }
-        .disabled(viewModel.presage.isScanning)
     }
 
     private func vitalsGrid(reading: CortisolReading) -> some View {
         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-            VitalCard(title: "Heart Rate", value: "\(Int(reading.heartRate))", unit: "bpm", icon: "heart.fill", color: .red)
-            VitalCard(title: "HRV", value: "\(Int(reading.hrv))", unit: "ms", icon: "waveform.path.ecg", color: .blue)
-            VitalCard(title: "SpO2", value: "\(Int(reading.spO2))", unit: "%", icon: "lungs.fill", color: .cyan)
-            VitalCard(title: "Resp Rate", value: "\(Int(reading.respiratoryRate))", unit: "br/min", icon: "wind", color: .green)
+            VitalCard(title: "Pulse Rate", value: "\(Int(reading.pulseRate))", unit: "bpm", icon: "heart.fill", color: .red)
+            VitalCard(title: "Breathing", value: "\(Int(reading.breathingRate))", unit: "br/min", icon: "wind", color: .green)
+            if let sys = reading.bloodPressureSystolic {
+                VitalCard(title: "Blood Pressure", value: "\(Int(sys))", unit: "mmHg", icon: "waveform.path.ecg", color: .blue)
+            }
+            VitalCard(title: "Stress", value: "\(Int(reading.stressLevel))", unit: "/100", icon: "brain.head.profile", color: .purple)
         }
     }
 
@@ -145,7 +141,7 @@ struct DashboardView: View {
                             .foregroundStyle(.secondary)
                     }
                     Spacer()
-                    Text("\(Int(reading.heartRate)) bpm")
+                    Text("\(Int(reading.pulseRate)) bpm")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
