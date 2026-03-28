@@ -24,7 +24,7 @@ struct SignUpView: View {
                     VStack(spacing: 8) {
                         Image(systemName: "person.badge.plus")
                             .font(.system(size: 48))
-                            .foregroundStyle(.purple)
+                            .foregroundStyle(AppTheme.deepTeal)
                         Text("Create Account")
                             .font(.title2.weight(.bold))
                     }
@@ -83,7 +83,7 @@ struct SignUpView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(isValid ? Color.purple : Color.gray)
+                    .background(isValid ? AppTheme.deepTeal : Color.gray)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .disabled(!isValid || authViewModel.isLoading)
                 }

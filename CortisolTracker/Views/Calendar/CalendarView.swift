@@ -11,7 +11,7 @@ struct CalendarView: View {
                     // Date Picker
                     DatePicker("Select Date", selection: $viewModel.selectedDate, displayedComponents: .date)
                         .datePickerStyle(.graphical)
-                        .tint(.purple)
+                        .tint(AppTheme.deepTeal)
                         .onChange(of: viewModel.selectedDate) { _, newDate in
                             Task { await viewModel.loadData(for: newDate) }
                         }
@@ -65,8 +65,9 @@ struct CalendarView: View {
                 .foregroundStyle(.secondary)
         }
         .padding()
-        .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .background(AppTheme.cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.cardRadius))
+            .shadow(color: .black.opacity(0.06), radius: AppTheme.cardShadow, x: 0, y: 2)
     }
 
     private var readingsSection: some View {
@@ -97,8 +98,9 @@ struct CalendarView: View {
             }
         }
         .padding()
-        .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .background(AppTheme.cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.cardRadius))
+            .shadow(color: .black.opacity(0.06), radius: AppTheme.cardShadow, x: 0, y: 2)
     }
 
     private var activitiesSection: some View {
@@ -116,7 +118,7 @@ struct CalendarView: View {
                 ForEach(viewModel.activities) { activity in
                     HStack {
                         Image(systemName: activity.category.icon)
-                            .foregroundStyle(.purple)
+                            .foregroundStyle(AppTheme.deepTeal)
                             .frame(width: 30)
                         VStack(alignment: .leading) {
                             Text(activity.title)
@@ -145,8 +147,9 @@ struct CalendarView: View {
             }
         }
         .padding()
-        .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .background(AppTheme.cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.cardRadius))
+            .shadow(color: .black.opacity(0.06), radius: AppTheme.cardShadow, x: 0, y: 2)
     }
 }
 

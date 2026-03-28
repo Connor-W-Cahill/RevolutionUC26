@@ -43,15 +43,15 @@ struct TipCard: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Image(systemName: tip.category.icon)
-                    .foregroundStyle(.purple)
+                    .foregroundStyle(AppTheme.softPurple)
                     .frame(width: 28)
 
                 Text(tip.category.rawValue)
                     .font(.caption)
-                    .foregroundStyle(.purple)
+                    .foregroundStyle(AppTheme.softPurple)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 2)
-                    .background(.purple.opacity(0.1))
+                    .background(AppTheme.softPurple.opacity(0.1))
                     .clipShape(Capsule())
 
                 Spacer()
@@ -73,8 +73,9 @@ struct TipCard: View {
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .background(AppTheme.cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: AppTheme.cardRadius))
+        .shadow(color: .black.opacity(0.06), radius: AppTheme.cardShadow, x: 0, y: 2)
         .onTapGesture {
             withAnimation(.easeInOut(duration: 0.2)) {
                 isExpanded.toggle()
