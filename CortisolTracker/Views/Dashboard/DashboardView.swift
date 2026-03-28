@@ -4,6 +4,13 @@ struct DashboardView: View {
     @StateObject private var viewModel = DashboardViewModel()
     @EnvironmentObject var authViewModel: AuthViewModel
 
+    private var greetingTitle: String {
+        let hour = Calendar.current.component(.hour, from: Date())
+        let first = authViewModel.user?.displayName.components(separatedBy: " ").first ?? ""
+        let base = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening"
+        return first.isEmpty ? base : "\(base), \(first)"
+    }
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -23,8 +30,12 @@ struct DashboardView: View {
                     .padding()
                 }
             }
-            .navigationTitle("Dashboard")
+            .navigationTitle(greetingTitle)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Image(systemName: "bell")
+                        .foregroundStyle(.deepTeal)
+                }
                 ToolbarItem(placement: .primaryAction) {
                     Menu {
                         if let user = authViewModel.user {

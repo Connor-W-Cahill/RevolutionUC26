@@ -91,7 +91,7 @@ async function generateTipsForUser(userID: string): Promise<Tip[]> {
   const activitiesSnap = await db
     .collection("activities")
     .where("userID", "==", userID)
-    .where("date", ">=", weekAgo.toISOString().split("T")[0])
+    .where("date", ">=", admin.firestore.Timestamp.fromDate(weekAgo))
     .orderBy("date", "desc")
     .limit(50)
     .get();

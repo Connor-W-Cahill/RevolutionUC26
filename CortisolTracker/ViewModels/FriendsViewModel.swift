@@ -18,7 +18,26 @@ class FriendsViewModel: ObservableObject {
 
         do {
             let user = try await firebase.fetchUser(id: userID)
-            friends = try await firebase.fetchFriends(friendIDs: user.friendIDs)
+            var loadedFriends = try await firebase.fetchFriends(friendIDs: user.friendIDs)
+
+            // Fetch latest reading for each friend concurrently
+            await withTaskGroup(of: (String, CortisolReading?).self) { group in
+                for friend in loadedFriends {
+                    group.addTask {
+                        let readings = try? await self.firebase.fetchFriendReadings(friendID: friend.id, limit: 1)
+                        return (friend.id, readings?.first)
+                    }
+                }
+                for await (friendID, reading) in group {
+                    if let idx = loadedFriends.firstIndex(where: { $0.id == friendID }),
+                       let reading = reading {
+                        loadedFriends[idx].latestStressLevel = reading.stressLevel
+                        loadedFriends[idx].latestReadingTime = reading.timestamp
+                    }
+                }
+            }
+
+            friends = loadedFriends
         } catch {
             self.error = error.localizedDescription
         }
@@ -35,7 +54,6 @@ class FriendsViewModel: ObservableObject {
 
         do {
             searchResults = try await firebase.searchUsers(query: searchQuery)
-            // Filter out existing friends
             let friendIDs = Set(friends.map(\.id))
             searchResults = searchResults.filter { !friendIDs.contains($0.id) && $0.id != firebase.currentUserID }
         } catch {

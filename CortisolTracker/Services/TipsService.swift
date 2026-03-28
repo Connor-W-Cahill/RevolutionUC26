@@ -5,9 +5,9 @@ struct Tip: Identifiable, Codable {
     var title: String
     var body: String
     var category: TipCategory
-    var createdAt: Date
+    var createdAt: String
 
-    init(id: String = UUID().uuidString, title: String, body: String, category: TipCategory, createdAt: Date = Date()) {
+    init(id: String = UUID().uuidString, title: String, body: String, category: TipCategory, createdAt: String = "") {
         self.id = id
         self.title = title
         self.body = body
@@ -17,12 +17,15 @@ struct Tip: Identifiable, Codable {
 }
 
 enum TipCategory: String, Codable, CaseIterable {
-    case breathing = "Breathing"
-    case exercise = "Exercise"
-    case sleep = "Sleep"
-    case nutrition = "Nutrition"
-    case mindfulness = "Mindfulness"
-    case social = "Social"
+    case breathing = "breathing"
+    case exercise = "exercise"
+    case sleep = "sleep"
+    case nutrition = "nutrition"
+    case mindfulness = "mindfulness"
+    case social = "social"
+    case general = "general"
+
+    var displayName: String { rawValue.capitalized }
 
     var icon: String {
         switch self {
@@ -32,6 +35,7 @@ enum TipCategory: String, Codable, CaseIterable {
         case .nutrition: return "leaf"
         case .mindfulness: return "brain.head.profile"
         case .social: return "person.2"
+        case .general: return "lightbulb"
         }
     }
 }
