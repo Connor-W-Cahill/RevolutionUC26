@@ -42,3 +42,9 @@ context/
 # Logs
 *.log
 npm-debug.log*
+
+# Presage
+PRESAGE_SDK_GUIDE.md
+
+# Uploads
+uploads/

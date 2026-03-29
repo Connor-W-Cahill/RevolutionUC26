@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=390, initial-scale=1.0">
+  <title>Cortisol Tracker — Mockup</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="iphone-frame">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="status-time">9:41</span>
+      <div class="status-icons">
+        <span>&#9679;&#9679;&#9679;&#9679;</span>
+        <span>WiFi</span>
+        <span>100%</span>
+      </div>
+    </div>
+
+    <!-- Screen Container -->
+    <div class="screen-container">
+      <!-- Dashboard Screen -->
+      <div class="screen active" id="screen-dashboard">
+        <div class="screen-scroll">
+          <div class="top-bar">
+            <div>
+              <div class="greeting">Good morning,</div>
+              <div class="greeting-name">Alex</div>
+            </div>
+            <button class="icon-btn">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="#1A6B5C"><path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zm0 2c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5z"/></svg>
+            </button>
+          </div>
+
+          <!-- Stress Gauge Card -->
+          <div class="card stress-card">
+            <div class="card-label">Current Stress</div>
+            <div class="gauge-container">
+              <svg class="gauge" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#E5E7EB" stroke-width="10"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="url(#gaugeGradient)" stroke-width="10" stroke-dasharray="100 214" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+                <defs>
+                  <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#A8E6CF"/>
+                    <stop offset="100%" stop-color="#2D9F8F"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="gauge-value">32</div>
+            </div>
+            <div class="stress-label stress-low">Low — Nice!</div>
+          </div>
+
+          <!-- Vitals Row -->
+          <div class="section-header">Vitals</div>
+          <div class="vitals-row">
+            <div class="vital-card vital-pulse">
+              <div class="vital-icon">&#9829;</div>
+              <div class="vital-value">72</div>
+              <div class="vital-label">BPM</div>
+            </div>
+            <div class="vital-card vital-breathing">
+              <div class="vital-icon">&#127907;</div>
+              <div class="vital-value">16</div>
+              <div class="vital-label">br/min</div>
+            </div>
+            <div class="vital-card vital-bp">
+              <div class="vital-icon">&#129656;</div>
+              <div class="vital-value">120/80</div>
+              <div class="vital-label">mmHg</div>
+            </div>
+          </div>
+
+          <!-- Take Reading Button -->
+          <button class="btn-primary" onclick="showScreen('screen-scan')">Take Reading</button>
+
+          <div class="section-header with-meta">
+            <span>Today's Readings</span>
+            <span class="section-meta">Avg: 35</span>
+          </div>
+          <div class="card readings-card">
+            <div class="reading-row">
+              <span class="reading-dot dot-low"></span>
+              <div class="reading-copy">
+                <div class="reading-title">Stress: 32</div>
+                <div class="reading-subtitle">9:04 AM</div>
+              </div>
+              <div class="reading-side">72 bpm</div>
+            </div>
+            <div class="reading-row">
+              <span class="reading-dot dot-moderate"></span>
+              <div class="reading-copy">
+                <div class="reading-title">Stress: 41</div>
+                <div class="reading-subtitle">1:42 PM</div>
+              </div>
+              <div class="reading-side">78 bpm</div>
+            </div>
+            <div class="reading-row">
+              <span class="reading-dot dot-low"></span>
+              <div class="reading-copy">
+                <div class="reading-title">Stress: 30</div>
+                <div class="reading-subtitle">7:18 PM</div>
+              </div>
+              <div class="reading-side">69 bpm</div>
+            </div>
+          </div>
+
+          <div class="dashboard-meta">
+            <div class="mini-card">
+              <div class="mini-card-label">Streak</div>
+              <div class="mini-card-value">5 days</div>
+            </div>
+            <div class="mini-card">
+              <div class="mini-card-label">Latest Spike</div>
+              <div class="mini-card-value">None in 2h</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calendar Screen -->
+      <div class="screen" id="screen-calendar">
+        <div class="screen-scroll">
+          <div class="top-bar">
+            <div class="page-title">Calendar</div>
+            <button class="icon-btn-sm add-btn">+</button>
+          </div>
+
+          <div class="card date-picker-card">
+            <div class="date-picker-label">Select Date</div>
+            <div class="date-picker-display">March 28, 2026</div>
+            <div class="calendar-grid">
+              <div class="cal-header">S</div>
+              <div class="cal-header">M</div>
+              <div class="cal-header">T</div>
+              <div class="cal-header">W</div>
+              <div class="cal-header">T</div>
+              <div class="cal-header">F</div>
+              <div class="cal-header">S</div>
+              <div class="cal-day empty"></div>
+              <div class="cal-day empty"></div>
+              <div class="cal-day empty"></div>
+              <div class="cal-day empty"></div>
+              <div class="cal-day empty"></div>
+              <div class="cal-day empty"></div>
+              <div class="cal-day"><span>1</span></div>
+              <div class="cal-day"><span>2</span></div>
+              <div class="cal-day"><span>3</span></div>
+              <div class="cal-day"><span>4</span></div>
+              <div class="cal-day"><span>5</span></div>
+              <div class="cal-day"><span>6</span></div>
+              <div class="cal-day"><span>7</span></div>
+              <div class="cal-day"><span>8</span></div>
+              <div class="cal-day"><span>9</span></div>
+              <div class="cal-day"><span>10</span></div>
+              <div class="cal-day"><span>11</span></div>
+              <div class="cal-day"><span>12</span></div>
+              <div class="cal-day"><span>13</span></div>
+              <div class="cal-day"><span>14</span></div>
+              <div class="cal-day"><span>15</span></div>
+              <div class="cal-day"><span>16</span></div>
+              <div class="cal-day"><span>17</span></div>
+              <div class="cal-day"><span>18</span></div>
+              <div class="cal-day"><span>19</span></div>
+              <div class="cal-day"><span>20</span></div>
+              <div class="cal-day"><span>21</span></div>
+              <div class="cal-day"><span>22</span></div>
+              <div class="cal-day"><span>23</span></div>
+              <div class="cal-day"><span>24</span></div>
+              <div class="cal-day"><span>25</span></div>
+              <div class="cal-day"><span>26</span></div>
+              <div class="cal-day"><span>27</span></div>
+              <div class="cal-day today selected"><span>28</span></div>
+              <div class="cal-day"><span>29</span></div>
+              <div class="cal-day"><span>30</span></div>
+              <div class="cal-day"><span>31</span></div>
+            </div>
+          </div>
+
+          <div class="card day-detail-card">
+            <div class="day-detail-header">
+              <div class="day-detail-title">Daily Average</div>
+              <div class="day-detail-avg">Stress: <strong>35</strong></div>
+            </div>
+            <div class="summary-meta">3 readings</div>
+          </div>
+
+          <div class="section-header">Readings</div>
+          <div class="card log-card">
+            <div class="reading-list-item">
+              <div class="reading-emoji">😌</div>
+              <div class="reading-copy">
+                <div class="reading-title">Stress: 32</div>
+                <div class="reading-subtitle">9:04 AM</div>
+              </div>
+              <div class="reading-stats">
+                <div>72 bpm</div>
+                <div>16 br/min</div>
+              </div>
+            </div>
+            <div class="reading-list-item">
+              <div class="reading-emoji">😐</div>
+              <div class="reading-copy">
+                <div class="reading-title">Stress: 41</div>
+                <div class="reading-subtitle">1:42 PM</div>
+              </div>
+              <div class="reading-stats">
+                <div>78 bpm</div>
+                <div>17 br/min</div>
+              </div>
+            </div>
+            <div class="reading-list-item">
+              <div class="reading-emoji">😌</div>
+              <div class="reading-copy">
+                <div class="reading-title">Stress: 30</div>
+                <div class="reading-subtitle">7:18 PM</div>
+              </div>
+              <div class="reading-stats">
+                <div>69 bpm</div>
+                <div>15 br/min</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-header">Activities</div>
+          <div class="card log-card">
+            <div class="activity-item">
+              <span class="log-icon">&#128564;</span>
+              <div class="activity-copy">
+                <div class="reading-title">Sleep</div>
+                <div class="reading-subtitle">7.5 hours, woke up rested</div>
+              </div>
+              <div class="activity-rating">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+            </div>
+            <div class="activity-item">
+              <span class="log-icon">&#127939;</span>
+              <div class="activity-copy">
+                <div class="reading-title">Walk after lunch</div>
+                <div class="reading-subtitle">20 minutes outside</div>
+              </div>
+              <div class="activity-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            </div>
+          </div>
+
+          <div class="card sheet-preview">
+            <div class="sheet-title">Log Activity</div>
+            <div class="sheet-row"><span>Category</span><span>Sleep</span></div>
+            <div class="sheet-row"><span>Title</span><span>Sleep</span></div>
+            <div class="sheet-row"><span>Notes</span><span>Optional</span></div>
+            <div class="sheet-row"><span>Rating</span><span>3/5</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Friends Screen -->
+      <div class="screen" id="screen-friends">
+        <div class="screen-scroll">
+          <div class="top-bar">
+            <div class="page-title">Friends</div>
+            <button class="icon-btn-sm add-btn">&#128101;+</button>
+          </div>
+
+          <div class="card friend-card">
+            <div class="friend-avatar">S</div>
+            <div class="friend-info">
+              <div class="friend-name">Sarah</div>
+              <div class="friend-meta">2 hours ago</div>
+            </div>
+            <div class="friend-status">
+              <span class="status-emoji">😌</span>
+              <span class="status-text">Low</span>
+            </div>
+          </div>
+
+          <div class="card friend-card">
+            <div class="friend-avatar" style="background:#FFD93D;color:#1A1A2E;">M</div>
+            <div class="friend-info">
+              <div class="friend-name">Marcus</div>
+              <div class="friend-meta">30 minutes ago</div>
+            </div>
+            <div class="friend-status">
+              <span class="status-emoji">😐</span>
+              <span class="status-text">Moderate</span>
+            </div>
+          </div>
+
+          <div class="card friend-card">
+            <div class="friend-avatar" style="background:#5B9BD5;">J</div>
+            <div class="friend-info">
+              <div class="friend-name">Jamie</div>
+              <div class="friend-meta">1 hour ago</div>
+            </div>
+            <div class="friend-status">
+              <span class="status-emoji">😌</span>
+              <span class="status-text">Low</span>
+            </div>
+          </div>
+
+          <div class="card search-preview">
+            <div class="search-title">Add Friend</div>
+            <div class="search-bar">Search by name</div>
+            <div class="search-row">
+              <div class="friend-avatar search-avatar">T</div>
+              <div class="friend-name">Taylor</div>
+              <button class="plus-circle">+</button>
+            </div>
+            <div class="search-row">
+              <div class="friend-avatar search-avatar">R</div>
+              <div class="friend-name">Robin</div>
+              <button class="plus-circle">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips Screen -->
+      <div class="screen" id="screen-tips">
+        <div class="screen-scroll">
+          <div class="top-bar">
+            <div class="page-title">Tips</div>
+          </div>
+
+          <div class="card tip-card expanded">
+            <div class="tip-header">
+              <div class="tip-chip-row">
+                <span class="tip-symbol">&#127788;</span>
+                <span class="tip-chip">Breathing</span>
+              </div>
+              <span class="tip-chevron">&#8963;</span>
+            </div>
+            <div class="tip-title">90-Second Reset</div>
+            <div class="tip-text">Inhale for 4 seconds, exhale for 6 seconds, and repeat for 90 seconds when your afternoon stress starts climbing.</div>
+          </div>
+
+          <div class="card tip-card">
+            <div class="tip-header">
+              <div class="tip-chip-row">
+                <span class="tip-symbol">&#127939;</span>
+                <span class="tip-chip">Exercise</span>
+              </div>
+              <span class="tip-chevron">&#8964;</span>
+            </div>
+            <div class="tip-title">Post-Lunch Walk</div>
+          </div>
+
+          <div class="card tip-card">
+            <div class="tip-header">
+              <div class="tip-chip-row">
+                <span class="tip-symbol">&#127769;</span>
+                <span class="tip-chip">Sleep</span>
+              </div>
+              <span class="tip-chevron">&#8964;</span>
+            </div>
+            <div class="tip-title">Protect 7 Hours</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scan Flow Screen -->
+      <div class="screen" id="screen-scan">
+        <div class="screen-scroll">
+          <div class="top-bar">
+            <button class="back-btn" onclick="showScreen('screen-dashboard')">&larr; Back</button>
+          </div>
+
+          <div class="scan-content">
+            <div class="scan-title">Get ready to scan</div>
+            <div class="scan-subtitle">Hold your phone steady and look at the camera</div>
+
+            <div class="camera-placeholder">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                <circle cx="12" cy="13" r="4"/>
+              </svg>
+              <div class="camera-label">SmartSpectra Camera View</div>
+            </div>
+
+            <div class="scan-progress">
+              <div class="scan-status">Scanning... 18s remaining</div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 40%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Post-scan results (shown together for mockup) -->
+          <div class="divider" style="margin: 24px 0"></div>
+          <div class="scan-results-label">After scan completes:</div>
+
+          <div class="card stress-card" style="margin-top: 16px">
+            <div class="card-label">Your Results</div>
+            <div class="gauge-container">
+              <svg class="gauge" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#E5E7EB" stroke-width="10"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="url(#gaugeGradient2)" stroke-width="10" stroke-dasharray="100 214" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 60 60)"/>
+                <defs>
+                  <linearGradient id="gaugeGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#A8E6CF"/>
+                    <stop offset="100%" stop-color="#2D9F8F"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="gauge-value">32</div>
+            </div>
+            <div class="stress-label stress-low">Low — Nice!</div>
+          </div>
+
+          <div class="vitals-row">
+            <div class="vital-card vital-pulse">
+              <div class="vital-icon">&#9829;</div>
+              <div class="vital-value">72</div>
+              <div class="vital-label">BPM</div>
+            </div>
+            <div class="vital-card vital-breathing">
+              <div class="vital-icon">&#127907;</div>
+              <div class="vital-value">16</div>
+              <div class="vital-label">br/min</div>
+            </div>
+            <div class="vital-card vital-bp">
+              <div class="vital-icon">&#129656;</div>
+              <div class="vital-value">120/80</div>
+              <div class="vital-label">mmHg</div>
+            </div>
+          </div>
+
+          <button class="btn-primary">Save Reading</button>
+          <button class="btn-secondary">Scan Again</button>
+          <button class="btn-tertiary">Discard</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <button class="tab active" onclick="showScreen('screen-dashboard')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span>Dashboard</span>
+      </button>
+      <button class="tab" onclick="showScreen('screen-calendar')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Calendar</span>
+      </button>
+      <button class="tab" onclick="showScreen('screen-friends')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Friends</span>
+      </button>
+      <button class="tab" onclick="showScreen('screen-tips')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/></svg>
+        <span>Tips</span>
+      </button>
+    </div>
+
+    <!-- Home Indicator -->
+    <div class="home-indicator"></div>
+  </div>
+
+  <script>
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+
+      // Update tab active state
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(t => t.classList.remove('active'));
+
+      const tabMap = {
+        'screen-dashboard': 0,
+        'screen-calendar': 1,
+        'screen-friends': 2,
+        'screen-tips': 3
+      };
+
+      if (tabMap[id] !== undefined) {
+        tabs[tabMap[id]].classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

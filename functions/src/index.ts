@@ -5,6 +5,13 @@ import {onDocumentCreated} from "firebase-functions/v2/firestore";
 import {defineSecret} from "firebase-functions/params";
 import Anthropic from "@anthropic-ai/sdk";
 import * as crypto from "crypto";
+import {
+  getBreathingRate,
+  getPulseRate,
+  getStressLevel,
+  makeFriendshipID,
+  toDateStr,
+} from "./utils";
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -15,13 +22,18 @@ const anthropicApiKey = defineSecret("ANTHROPIC_API_KEY");
 
 interface Reading {
   userID: string;
-  heartRate: number;
-  hrv: number;
-  spO2: number;
-  respiratoryRate: number;
-  stressLevel: number;
+  heartRate?: number;
+  hrv?: number;
+  spO2?: number;
+  respiratoryRate?: number;
+  pulseRate?: number;
+  breathingRate?: number;
+  bloodPressureSystolic?: number | null;
+  bloodPressureDiastolic?: number | null;
+  stressLevel?: number;
   timestamp: admin.firestore.Timestamp;
   source?: string;
+  isSpikeCandidate?: boolean;
 }
 
 // Fixed: date is Timestamp (stored by Swift/iOS client), not string
@@ -43,10 +55,18 @@ interface Tip {
   suggestedTime?: string;
 }
 
+interface DayTrend {
+  date: string;
+  avgPulseRate: number | null;
+  avgBreathingRate: number | null;
+  readingCount: number;
+}
+
 // ─── Spike Detection ────────────────────────────────────────────────────────
 
 async function detectSpike(readingID: string, reading: Reading): Promise<void> {
-  const {userID, stressLevel, timestamp} = reading;
+  const {userID, timestamp} = reading;
+  const stressLevel = getStressLevel(reading);
   const readingRef = db.collection("readings").doc(readingID);
 
   const sevenDaysAgo = new Date(timestamp.toDate().getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -66,7 +86,7 @@ async function detectSpike(readingID: string, reading: Reading): Promise<void> {
     return;
   }
 
-  const levels = priorReadings.map((r) => r.stressLevel);
+  const levels = priorReadings.map((r) => getStressLevel(r));
   const mean = levels.reduce((a, b) => a + b, 0) / levels.length;
   const variance = levels.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / levels.length;
   const stdDev = Math.sqrt(variance);
@@ -74,7 +94,7 @@ async function detectSpike(readingID: string, reading: Reading): Promise<void> {
   // Previous reading within last 2 hours
   const twoHoursAgo = new Date(timestamp.toDate().getTime() - 2 * 60 * 60 * 1000);
   const recentPrior = priorReadings.find((r) => r.timestamp.toDate() >= twoHoursAgo);
-  const prevLevel = recentPrior?.stressLevel;
+  const prevLevel = recentPrior ? getStressLevel(recentPrior) : undefined;
 
   const rule1 = stressLevel >= 75;
   const rule2 = stressLevel > mean + 1.5 * stdDev;
@@ -117,10 +137,6 @@ async function detectSpike(readingID: string, reading: Reading): Promise<void> {
 }
 
 // ─── Streak Management ──────────────────────────────────────────────────────
-
-function toDateStr(date: Date): string {
-  return date.toISOString().split("T")[0];
-}
 
 async function updateStreak(
   userID: string,
@@ -228,7 +244,7 @@ async function computeGroupStats(groupID: string, dateStr: string): Promise<void
 
       if (!snap.empty) {
         activeMemberCount++;
-        snap.docs.forEach((d) => stressValues.push((d.data() as Reading).stressLevel));
+        snap.docs.forEach((d) => stressValues.push(getStressLevel(d.data() as Reading)));
       }
     })
   );
@@ -264,6 +280,146 @@ export const recomputeGroupDailyStats = onCall(async (request) => {
 
   await computeGroupStats(groupID, date ?? toDateStr(new Date()));
   return {success: true};
+});
+
+// ─── Friend Management ─────────────────────────────────────────────────────
+
+export const sendFriendRequest = onCall(async (request) => {
+  if (!request.auth) {
+    throw new HttpsError("unauthenticated", "Must be logged in");
+  }
+
+  const senderID = request.auth.uid;
+  const targetUserID = request.data?.targetUserID;
+
+  if (!targetUserID || typeof targetUserID !== "string") {
+    throw new HttpsError("invalid-argument", "targetUserID is required");
+  }
+  if (senderID === targetUserID) {
+    throw new HttpsError("invalid-argument", "Cannot friend yourself");
+  }
+
+  const targetDoc = await db.collection("users").doc(targetUserID).get();
+  if (!targetDoc.exists) {
+    throw new HttpsError("not-found", "User not found");
+  }
+
+  const friendshipID = makeFriendshipID(senderID, targetUserID);
+  const friendshipRef = db.collection("friendships").doc(friendshipID);
+  const existing = await friendshipRef.get();
+
+  if (existing.exists) {
+    const data = existing.data()!;
+    if (data.status === "accepted") {
+      throw new HttpsError("already-exists", "Already friends");
+    }
+    if (data.status === "pending") {
+      throw new HttpsError("already-exists", "Friend request already pending");
+    }
+  }
+
+  const userA = senderID < targetUserID ? senderID : targetUserID;
+  const userB = senderID < targetUserID ? targetUserID : senderID;
+  const now = admin.firestore.FieldValue.serverTimestamp();
+
+  await friendshipRef.set({
+    userA,
+    userB,
+    status: "pending",
+    initiatedBy: senderID,
+    createdAt: now,
+    updatedAt: now,
+  });
+
+  return {friendshipID, status: "pending"};
+});
+
+export const respondToFriendRequest = onCall(async (request) => {
+  if (!request.auth) {
+    throw new HttpsError("unauthenticated", "Must be logged in");
+  }
+
+  const userID = request.auth.uid;
+  const friendshipID = request.data?.friendshipID;
+  const action = request.data?.action;
+
+  if (!friendshipID || typeof friendshipID !== "string") {
+    throw new HttpsError("invalid-argument", "friendshipID is required");
+  }
+  if (action !== "accept" && action !== "decline") {
+    throw new HttpsError("invalid-argument", "action must be 'accept' or 'decline'");
+  }
+
+  const friendshipRef = db.collection("friendships").doc(friendshipID);
+  const friendshipDoc = await friendshipRef.get();
+  if (!friendshipDoc.exists) {
+    throw new HttpsError("not-found", "Friend request not found");
+  }
+
+  const data = friendshipDoc.data()!;
+  if (data.initiatedBy === userID) {
+    throw new HttpsError("permission-denied", "Cannot respond to your own request");
+  }
+  if (data.userA !== userID && data.userB !== userID) {
+    throw new HttpsError("permission-denied", "Not your friend request");
+  }
+  if (data.status !== "pending") {
+    throw new HttpsError("failed-precondition", `Request is already ${data.status}`);
+  }
+
+  const newStatus = action === "accept" ? "accepted" : "declined";
+  const batch = db.batch();
+  batch.update(friendshipRef, {
+    status: newStatus,
+    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+  });
+
+  if (newStatus === "accepted") {
+    const otherUserID = data.userA === userID ? data.userB : data.userA;
+    batch.update(db.collection("users").doc(userID), {
+      friendIDs: admin.firestore.FieldValue.arrayUnion(otherUserID),
+    });
+    batch.update(db.collection("users").doc(otherUserID), {
+      friendIDs: admin.firestore.FieldValue.arrayUnion(userID),
+    });
+  }
+
+  await batch.commit();
+  return {status: newStatus};
+});
+
+export const getFriendRequests = onCall(async (request) => {
+  if (!request.auth) {
+    throw new HttpsError("unauthenticated", "Must be logged in");
+  }
+
+  const userID = request.auth.uid;
+  const asUserA = await db.collection("friendships")
+    .where("userA", "==", userID)
+    .where("status", "==", "pending")
+    .get();
+  const asUserB = await db.collection("friendships")
+    .where("userB", "==", userID)
+    .where("status", "==", "pending")
+    .get();
+
+  const incoming: Array<{friendshipID: string; fromUserID: string; createdAt: unknown}> = [];
+  const outgoing: Array<{friendshipID: string; toUserID: string; createdAt: unknown}> = [];
+
+  const processDoc = (doc: admin.firestore.QueryDocumentSnapshot) => {
+    const data = doc.data();
+    const otherUserID = data.userA === userID ? data.userB : data.userA;
+    if (data.initiatedBy === userID) {
+      outgoing.push({friendshipID: doc.id, toUserID: otherUserID, createdAt: data.createdAt});
+    } else {
+      incoming.push({friendshipID: doc.id, fromUserID: otherUserID, createdAt: data.createdAt});
+    }
+  };
+
+  asUserA.docs.forEach(processDoc);
+  asUserB.docs.forEach(processDoc);
+
+  return {incoming, outgoing};
 });
 
 // ─── AI Tips Generation ─────────────────────────────────────────────────────
@@ -357,8 +513,8 @@ async function callAI(
   const client = new Anthropic();
 
   const readingSummary = readings.slice(0, 20).map((r) => ({
-    stress: r.stressLevel,
-    hr: r.heartRate,
+    stress: getStressLevel(r),
+    hr: getPulseRate(r),
     hrv: r.hrv,
     time: r.timestamp.toDate().toISOString(),
   }));
@@ -389,7 +545,7 @@ async function callAI(
   readings.forEach((r) => {
     const h = r.timestamp.toDate().getHours();
     if (!hourBuckets[h]) hourBuckets[h] = [];
-    hourBuckets[h].push(r.stressLevel);
+    hourBuckets[h].push(getStressLevel(r));
   });
   const peakHoursText = Object.entries(hourBuckets)
     .map(([h, vals]) => ({
@@ -465,6 +621,64 @@ Return ONLY a valid JSON array of 3-5 tip objects:
       ...(t.suggestedTime ? {suggestedTime: t.suggestedTime} : {}),
     }));
 }
+
+export const getWeeklyTrends = onCall(async (request) => {
+  if (!request.auth) {
+    throw new HttpsError("unauthenticated", "Must be logged in");
+  }
+
+  const userID = request.auth.uid;
+  const now = new Date();
+  const weekAgo = new Date(now);
+  weekAgo.setDate(weekAgo.getDate() - 7);
+
+  const readingsSnap = await db
+    .collection("readings")
+    .where("userID", "==", userID)
+    .where("timestamp", ">=", admin.firestore.Timestamp.fromDate(weekAgo))
+    .orderBy("timestamp", "desc")
+    .get();
+
+  const byDate = new Map<string, Array<{pulseRate: number | null; breathingRate: number | null}>>();
+  for (const doc of readingsSnap.docs) {
+    const data = doc.data() as Reading;
+    const date = (data.timestamp as admin.firestore.Timestamp).toDate().toISOString().split("T")[0];
+    if (!byDate.has(date)) {
+      byDate.set(date, []);
+    }
+    byDate.get(date)!.push({
+      pulseRate: getPulseRate(data),
+      breathingRate: getBreathingRate(data),
+    });
+  }
+
+  const trends: DayTrend[] = [];
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date(now);
+    date.setDate(date.getDate() - i);
+    const dateStr = date.toISOString().split("T")[0];
+    const dayReadings = byDate.get(dateStr) || [];
+    const pulseValues = dayReadings
+      .map((reading) => reading.pulseRate)
+      .filter((value): value is number => value != null);
+    const breathingValues = dayReadings
+      .map((reading) => reading.breathingRate)
+      .filter((value): value is number => value != null);
+
+    trends.push({
+      date: dateStr,
+      avgPulseRate: pulseValues.length > 0
+        ? Math.round((pulseValues.reduce((a, b) => a + b, 0) / pulseValues.length) * 10) / 10
+        : null,
+      avgBreathingRate: breathingValues.length > 0
+        ? Math.round((breathingValues.reduce((a, b) => a + b, 0) / breathingValues.length) * 10) / 10
+        : null,
+      readingCount: dayReadings.length,
+    });
+  }
+
+  return {trends};
+});
 
 async function saveTips(
   userID: string,

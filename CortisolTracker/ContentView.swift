@@ -7,7 +7,7 @@ struct ContentView: View {
         TabView(selection: $selectedTab) {
             DashboardView()
                 .tabItem {
-                    Image(systemName: selectedTab == 0 ? "heart.text.square.fill" : "heart.text.square")
+                    Image(systemName: "heart.text.square")
                     Text("Dashboard")
                 }
                 .tag(0)
@@ -21,25 +21,18 @@ struct ContentView: View {
 
             FriendsView()
                 .tabItem {
-                    Image(systemName: selectedTab == 2 ? "person.2.fill" : "person.2")
+                    Image(systemName: "person.2")
                     Text("Friends")
                 }
                 .tag(2)
 
-            GroupsView()
-                .tabItem {
-                    Image(systemName: "person.3")
-                    Text("Groups")
-                }
-                .tag(3)
-
             TipsView()
                 .tabItem {
-                    Image(systemName: selectedTab == 3 ? "lightbulb.fill" : "lightbulb")
+                    Image(systemName: "lightbulb")
                     Text("Tips")
                 }
-                .tag(4)
+                .tag(3)
         }
-        .tint(Color(hex: "1A6B5C"))
+        .tint(AppTheme.deepTeal)
     }
 }
