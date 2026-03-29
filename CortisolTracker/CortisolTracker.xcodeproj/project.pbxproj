@@ -40,6 +40,7 @@
 		BB010027AABBCCDD00BB0001 /* TipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020027AABBCCDD00BB0001 /* TipsView.swift */; };
 		BB010028AABBCCDD00BB0001 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020028AABBCCDD00BB0001 /* Theme.swift */; };
 		BB010029AABBCCDD00BB0001 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020029AABBCCDD00BB0001 /* ScanView.swift */; };
+		BB010030AABBCCDD00BB0001 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020030AABBCCDD00BB0001 /* Config.swift */; };
 		CC010001AABBCCDD00CC0001 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CC020001AABBCCDD00CC0001 /* GoogleService-Info.plist */; };
 		CC010002AABBCCDD00CC0002 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC020002AABBCCDD00CC0002 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -94,6 +95,7 @@
 		BB020027AABBCCDD00BB0001 /* TipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsView.swift; sourceTree = "<group>"; };
 		BB020028AABBCCDD00BB0001 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		BB020029AABBCCDD00BB0001 /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
+		BB020030AABBCCDD00BB0001 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		CC020001AABBCCDD00CC0001 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CC020002AABBCCDD00CC0002 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "CortisolTracker/Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -162,6 +164,7 @@
 				BB020002AABBCCDD00BB0001 /* ContentView.swift */,
 				BB020003AABBCCDD00BB0001 /* Colors.swift */,
 				BB020028AABBCCDD00BB0001 /* Theme.swift */,
+				BB020030AABBCCDD00BB0001 /* Config.swift */,
 				CC020002AABBCCDD00CC0002 /* Assets.xcassets */,
 				BB030002AABBCCDD00BB0001 /* Extensions */,
 				BB030003AABBCCDD00BB0001 /* Models */,
@@ -472,6 +475,7 @@
 				BB010027AABBCCDD00BB0001 /* TipsView.swift in Sources */,
 				BB010028AABBCCDD00BB0001 /* Theme.swift in Sources */,
 				BB010029AABBCCDD00BB0001 /* ScanView.swift in Sources */,
+				BB010030AABBCCDD00BB0001 /* Config.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
