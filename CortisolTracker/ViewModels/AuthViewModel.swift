@@ -59,6 +59,19 @@ class AuthViewModel {
         }
     }
 
+    func updateDisplayName(_ name: String) async {
+        guard var currentUser = user else { return }
+        let trimmed = name.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else { return }
+        currentUser.displayName = trimmed
+        do {
+            try await firebase.saveUser(currentUser)
+            user = currentUser
+        } catch {
+            self.error = error.localizedDescription
+        }
+    }
+
     private func loadUser(id: String) async {
         do {
             user = try await firebase.fetchUser(id: id)
