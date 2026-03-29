@@ -3,17 +3,18 @@ import FirebaseCore
 
 @main
 struct CortisolTrackerApp: App {
-    @StateObject private var authViewModel = AuthViewModel()
+    @State private var authViewModel: AuthViewModel
 
     init() {
         FirebaseApp.configure()
+        _authViewModel = State(wrappedValue: AuthViewModel())
     }
 
     var body: some Scene {
         WindowGroup {
             if authViewModel.isAuthenticated {
                 ContentView()
-                    .environmentObject(authViewModel)
+                    .environment(authViewModel)
             } else {
                 LoginView(authViewModel: authViewModel)
             }

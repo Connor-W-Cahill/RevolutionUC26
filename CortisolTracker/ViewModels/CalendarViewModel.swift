@@ -1,13 +1,13 @@
 import Foundation
 
-@MainActor
-class CalendarViewModel: ObservableObject {
-    @Published var selectedDate = Date()
-    @Published var readings: [CortisolReading] = []
-    @Published var activities: [Activity] = []
-    @Published var monthlyAverages: [String: Double] = [:]  // "YYYY-MM-DD" -> avgStress
-    @Published var isLoading = false
-    @Published var error: String?
+@Observable
+class CalendarViewModel {
+    var selectedDate = Date()
+    var readings: [CortisolReading] = []
+    var activities: [Activity] = []
+    var monthlyAverages: [String: Double] = [:]  // "YYYY-MM-DD" -> avgStress
+    var isLoading = false
+    var error: String?
 
     private let firebase = FirebaseService.shared
     private var loadedMonthKey: String = ""  // tracks which month's averages are loaded

@@ -2,7 +2,7 @@ import SwiftUI
 import AuthenticationServices
 
 struct LoginView: View {
-    @ObservedObject var authViewModel: AuthViewModel
+    @Bindable var authViewModel: AuthViewModel
     @State private var email = ""
     @State private var password = ""
     @State private var showSignUp = false

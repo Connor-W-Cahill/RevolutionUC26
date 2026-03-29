@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct FriendsView: View {
-    @StateObject private var viewModel = FriendsViewModel()
+    @State private var viewModel = FriendsViewModel()
     @State private var showSearch = false
 
     var body: some View {
@@ -32,16 +32,10 @@ struct FriendsView: View {
             .sheet(isPresented: $showSearch) {
                 SearchFriendsSheet(viewModel: viewModel)
             }
-            .task {
-                await viewModel.loadFriends()
-            }
-            .refreshable {
-                await viewModel.loadFriends()
-            }
+            .task { await viewModel.loadFriends() }
+            .refreshable { await viewModel.loadFriends() }
             .overlay {
-                if viewModel.isLoading {
-                    ProgressView()
-                }
+                if viewModel.isLoading { ProgressView() }
             }
         }
     }
@@ -52,7 +46,6 @@ struct FriendRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            // Avatar
             Circle()
                 .fill(AppTheme.mint)
                 .frame(width: 44, height: 44)
@@ -70,6 +63,10 @@ struct FriendRow: View {
                     Text(time, style: .relative)
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                } else {
+                    Text("No readings yet")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
                 }
             }
 
@@ -94,7 +91,7 @@ struct FriendRow: View {
 }
 
 struct SearchFriendsSheet: View {
-    @ObservedObject var viewModel: FriendsViewModel
+    @Bindable var viewModel: FriendsViewModel
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {

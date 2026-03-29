@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct DashboardView: View {
-    @StateObject private var viewModel = DashboardViewModel()
-    @EnvironmentObject var authViewModel: AuthViewModel
+    @State private var viewModel = DashboardViewModel()
+    @Environment(AuthViewModel.self) var authViewModel
     @State private var showScan = false
 
     var body: some View {
@@ -23,12 +23,8 @@ struct DashboardView: View {
             }
             .background(AppTheme.background)
             .navigationBarHidden(true)
-            .task {
-                await viewModel.loadData()
-            }
-            .refreshable {
-                await viewModel.loadData()
-            }
+            .task { await viewModel.loadData() }
+            .refreshable { await viewModel.loadData() }
             .fullScreenCover(isPresented: $showScan) {
                 if let userID = viewModel.currentUserID {
                     ScanView(userID: userID) { reading in
@@ -95,7 +91,6 @@ struct DashboardView: View {
                     .foregroundStyle(AppTheme.textSecondary)
                     .tracking(0.5)
 
-                // Radial gauge
                 ZStack {
                     Circle()
                         .stroke(AppTheme.divider, lineWidth: 10)
@@ -240,4 +235,9 @@ struct VitalCard: View {
         .background(color.opacity(0.08))
         .clipShape(RoundedRectangle(cornerRadius: AppTheme.cardRadius))
     }
+}
+
+#Preview {
+    DashboardView()
+        .environment(AuthViewModel())
 }
