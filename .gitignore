@@ -25,8 +25,9 @@ Config.swift
 # iOS / Xcode
 GoogleService-Info.plist
 CortisolTracker.xcodeproj/xcuserdata/
+CortisolTracker.xcodeproj/xcshareddata/
 CortisolTracker.xcworkspace/xcuserdata/
-CortisolTracker.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+CortisolTracker.xcworkspace/xcshareddata/
 *.xcuserstate
 DerivedData/
 *.ipa
