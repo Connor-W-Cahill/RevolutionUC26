@@ -308,9 +308,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				E341748E2F7867F700AEA8AA /* CortisolTracker */,
-			);
 			name = CortisolTracker;
 			packageProductDependencies = (
 				AA020001AABBCCDD00AA0001 /* FirebaseAuth */,
