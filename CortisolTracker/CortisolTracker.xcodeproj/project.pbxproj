@@ -847,20 +847,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		AA030001AABBCCDD00AA0001 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 11.0.0;
-			};
-		};
 		E398B41D2F788B1300F08A62 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 12.11.0;
+				minimumVersion = 12.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -868,22 +860,22 @@
 /* Begin XCSwiftPackageProductDependency section */
 		AA020001AABBCCDD00AA0001 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = AA030001AABBCCDD00AA0001 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = E398B41D2F788B1300F08A62 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
 		};
 		AA020002AABBCCDD00AA0001 /* FirebaseCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = AA030001AABBCCDD00AA0001 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = E398B41D2F788B1300F08A62 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCore;
 		};
 		AA020003AABBCCDD00AA0001 /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = AA030001AABBCCDD00AA0001 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = E398B41D2F788B1300F08A62 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
 		};
 		AA020004AABBCCDD00AA0001 /* FirebaseFunctions */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = AA030001AABBCCDD00AA0001 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = E398B41D2F788B1300F08A62 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFunctions;
 		};
 /* End XCSwiftPackageProductDependency section */
