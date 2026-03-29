@@ -1,4 +1,5 @@
 import SwiftUI
+import AVFoundation
 
 struct ScanView: View {
     @Environment(\.dismiss) private var dismiss
@@ -9,92 +10,221 @@ struct ScanView: View {
     @State private var reading: CortisolReading?
     @State private var showResult = false
     @State private var error: String?
+    @State private var pulseAnimation = false
+
+#if os(iOS)
+    @State private var camera = CameraService()
+#endif
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
+            ZStack {
                 if showResult, let reading = reading {
                     resultView(reading: reading)
+                        .background(AppTheme.background)
                 } else {
                     scanView
                 }
             }
-            .background(AppTheme.background)
-            .navigationTitle("Scan Vitals")
+            .navigationTitle(showResult ? "Your Results" : "Scan Vitals")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
-                        .foregroundStyle(AppTheme.deepTeal)
+                    Button("Cancel") {
+#if os(iOS)
+                        camera.stop()
+#endif
+                        dismiss()
+                    }
+                    .foregroundStyle(showResult ? AppTheme.deepTeal : .white)
                 }
             }
+            .toolbarBackground(showResult ? .visible : .hidden, for: .navigationBar)
         }
+#if os(iOS)
+        .task {
+            if !showResult {
+                await camera.start()
+            }
+        }
+        .onDisappear {
+            camera.stop()
+        }
+#endif
     }
 
     // MARK: - Scan View
 
     private var scanView: some View {
-        VStack(spacing: 24) {
-            Spacer()
-
-            VStack(spacing: 8) {
-                Text("Get ready to scan")
-                    .font(.system(size: 24, weight: .bold))
-                    .foregroundStyle(AppTheme.textPrimary)
-                Text("Hold your phone steady\nand look at the camera")
-                    .font(.subheadline)
-                    .foregroundStyle(AppTheme.textSecondary)
-                    .multilineTextAlignment(.center)
-            }
-
-            if presage.isScanning {
-                VStack(spacing: 12) {
-                    ProgressView(value: presage.scanProgress)
-                        .progressViewStyle(.linear)
-                        .tint(AppTheme.deepTeal)
-                        .padding(.horizontal, 40)
-                    Text("\(Int(presage.scanProgress * 100))%")
-                        .font(.caption)
-                        .foregroundStyle(AppTheme.textSecondary)
-                }
-                .padding()
+        ZStack {
+#if os(iOS)
+            // Live camera feed
+            if camera.isAuthorized {
+                CameraPreviewView(session: camera.session)
+                    .ignoresSafeArea()
             } else {
-                Button {
-                    Task {
-                        do {
-                            let result = try await presage.startScan(userID: userID)
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                reading = result
-                                showResult = true
-                            }
-                        } catch {
-                            self.error = error.localizedDescription
-                        }
+                Color.black.ignoresSafeArea()
+            }
+#else
+            Color.black.ignoresSafeArea()
+#endif
+
+            // Dark gradient overlay at top and bottom
+            VStack {
+                LinearGradient(
+                    colors: [.black.opacity(0.6), .clear],
+                    startPoint: .top, endPoint: .bottom
+                )
+                .frame(height: 160)
+                Spacer()
+                LinearGradient(
+                    colors: [.clear, .black.opacity(0.7)],
+                    startPoint: .top, endPoint: .bottom
+                )
+                .frame(height: 260)
+            }
+            .ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                // Top status
+                VStack(spacing: 6) {
+                    if presage.isScanning {
+                        Text("Analyzing cortisol levels...")
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                    } else {
+                        Text("Position your face in the oval")
+                            .font(.headline)
+                            .foregroundStyle(.white)
                     }
-                } label: {
-                    HStack {
-                        Image(systemName: "camera.viewfinder")
-                        Text("Start Scan")
+                }
+                .padding(.top, 16)
+
+                Spacer()
+
+                // Face oval guide
+                faceOvalGuide
+
+                Spacer()
+
+                // Bottom controls
+                VStack(spacing: 16) {
+                    if presage.isScanning {
+                        scanProgressView
+                    } else {
+                        startScanButton
                     }
-                    .font(.headline)
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-                    .background(AppTheme.deepTeal)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .padding(.horizontal, 40)
+
+                    if let error {
+                        Text(error)
+                            .font(.caption)
+                            .foregroundStyle(AppTheme.stressHigh)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 24)
+                    }
+
+#if os(iOS)
+                    if camera.permissionDenied {
+                        Text("Camera access denied. Enable it in Settings to use face scanning.")
+                            .font(.caption)
+                            .foregroundStyle(.white.opacity(0.7))
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 24)
+                    }
+#endif
+                }
+                .padding(.bottom, 40)
+            }
+        }
+    }
+
+    // MARK: - Face Oval Guide
+
+    private var faceOvalGuide: some View {
+        ZStack {
+            // Oval cutout effect — white border
+            Ellipse()
+                .stroke(
+                    presage.isScanning
+                        ? AppTheme.softTeal
+                        : Color.white.opacity(0.6),
+                    lineWidth: presage.isScanning ? 3 : 2
+                )
+                .frame(width: 200, height: 270)
+                .scaleEffect(pulseAnimation && presage.isScanning ? 1.03 : 1.0)
+                .animation(
+                    presage.isScanning
+                        ? .easeInOut(duration: 0.8).repeatForever(autoreverses: true)
+                        : .default,
+                    value: pulseAnimation
+                )
+
+            // Scan line sweep during active scan
+            if presage.isScanning {
+                Capsule()
+                    .fill(
+                        LinearGradient(
+                            colors: [AppTheme.softTeal.opacity(0), AppTheme.softTeal, AppTheme.softTeal.opacity(0)],
+                            startPoint: .leading, endPoint: .trailing
+                        )
+                    )
+                    .frame(width: 180, height: 2)
+                    .offset(y: scanLineOffset)
+                    .clipShape(Ellipse().size(width: 200, height: 270).offset(x: -100, y: -135))
+            }
+        }
+        .onChange(of: presage.isScanning) { _, scanning in
+            pulseAnimation = scanning
+        }
+    }
+
+    private var scanLineOffset: CGFloat {
+        let progress = presage.scanProgress
+        return CGFloat(-135 + progress * 270)
+    }
+
+    // MARK: - Progress & Button
+
+    private var scanProgressView: some View {
+        VStack(spacing: 10) {
+            ProgressView(value: presage.scanProgress)
+                .progressViewStyle(.linear)
+                .tint(AppTheme.softTeal)
+                .padding(.horizontal, 40)
+            Text("\(Int(presage.scanProgress * 100))%")
+                .font(.caption.monospacedDigit())
+                .foregroundStyle(.white.opacity(0.8))
+        }
+    }
+
+    private var startScanButton: some View {
+        Button {
+            Task {
+                do {
+                    let result = try await presage.startScan(userID: userID)
+#if os(iOS)
+                    camera.stop()
+#endif
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        reading = result
+                        showResult = true
+                    }
+                } catch {
+                    self.error = error.localizedDescription
                 }
             }
-
-            if let error {
-                Text(error)
-                    .font(.caption)
-                    .foregroundStyle(AppTheme.stressHigh)
-                    .padding()
-                    .multilineTextAlignment(.center)
+        } label: {
+            HStack {
+                Image(systemName: "camera.viewfinder")
+                Text("Start Scan")
             }
-
-            Spacer()
+            .font(.headline)
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 14)
+            .background(AppTheme.deepTeal)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .padding(.horizontal, 40)
         }
     }
 
@@ -132,11 +262,9 @@ struct ScanView: View {
                     .foregroundStyle(AppTheme.stressTextColor(for: reading.stressCategory))
 
                 HStack(spacing: 12) {
-                    resultVital(icon: "heart.fill", value: "\(Int(reading.pulseRate))", unit: "BPM", color: AppTheme.warmCoral)
-                    resultVital(icon: "wind", value: "\(Int(reading.breathingRate))", unit: "br/min", color: AppTheme.calmBlue)
-                    if let sys = reading.bloodPressureSystolic {
-                        resultVital(icon: "waveform.path.ecg", value: "\(Int(sys))", unit: "mmHg", color: AppTheme.softPurple)
-                    }
+                    resultVital(icon: "heart.fill",         value: "\(Int(reading.pulseRate))",     unit: "BPM",    color: AppTheme.warmCoral)
+                    resultVital(icon: "wind",               value: "\(Int(reading.breathingRate))", unit: "br/min", color: AppTheme.calmBlue)
+                    resultVital(icon: "waveform.path.ecg",  value: "\(Int(reading.hrv))",           unit: "HRV ms", color: AppTheme.softPurple)
                 }
                 .padding(.vertical, 8)
 
@@ -158,6 +286,9 @@ struct ScanView: View {
                         self.reading = nil
                         showResult = false
                     }
+#if os(iOS)
+                    Task { await camera.start() }
+#endif
                 } label: {
                     Text("Scan Again")
                         .font(.headline)
