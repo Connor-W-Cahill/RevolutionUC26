@@ -20,6 +20,7 @@ functions/lib/
 node_modules/
 
 # iOS / Xcode
+GoogleService-Info.plist
 CortisolTracker.xcodeproj/xcuserdata/
 CortisolTracker.xcworkspace/xcuserdata/
 CortisolTracker.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist

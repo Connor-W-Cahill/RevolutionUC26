@@ -12,8 +12,39 @@ class FriendsViewModel {
 
     private let firebase = FirebaseService.shared
 
+    // Demo friends shown when Firebase has no data or is offline
+    private let demoFriends: [Friend] = [
+        Friend(
+            id: "demo_alex",
+            displayName: "Alex Rivera",
+            latestStressLevel: 42.0,
+            latestReadingTime: Calendar.current.date(byAdding: .hour, value: -1, to: Date())
+        ),
+        Friend(
+            id: "demo_jordan",
+            displayName: "Jordan Lee",
+            latestStressLevel: 71.0,
+            latestReadingTime: Calendar.current.date(byAdding: .hour, value: -3, to: Date())
+        ),
+        Friend(
+            id: "demo_sam",
+            displayName: "Sam Chen",
+            latestStressLevel: 18.0,
+            latestReadingTime: Calendar.current.date(byAdding: .minute, value: -30, to: Date())
+        ),
+        Friend(
+            id: "demo_morgan",
+            displayName: "Morgan Park",
+            latestStressLevel: 55.0,
+            latestReadingTime: Calendar.current.date(byAdding: .hour, value: -5, to: Date())
+        ),
+    ]
+
     func loadFriends() async {
-        guard let userID = firebase.currentUserID else { return }
+        guard let userID = firebase.currentUserID else {
+            friends = demoFriends
+            return
+        }
         isLoading = true
         error = nil
 
@@ -41,9 +72,17 @@ class FriendsViewModel {
                 }
             }
 
-            friends = loadedFriends
+            // Always include demo friends (filter out any whose name matches a real friend)
+            let realNames = Set(loadedFriends.map(\.displayName))
+            let extraDemos = demoFriends.filter { !realNames.contains($0.displayName) }
+            friends = loadedFriends + extraDemos
         } catch {
-            self.error = error.localizedDescription
+            let nsError = error as NSError
+            // Offline or error — fall back to demo friends
+            friends = demoFriends
+            if !(nsError.domain == "FIRFirestoreErrorDomain" && nsError.code == 14) {
+                self.error = error.localizedDescription
+            }
         }
 
         isLoading = false

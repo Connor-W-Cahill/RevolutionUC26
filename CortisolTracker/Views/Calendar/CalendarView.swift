@@ -1,19 +1,26 @@
 import SwiftUI
 
 struct CalendarView: View {
-    @State private var viewModel = CalendarViewModel()
+    @Environment(CalendarViewModel.self) private var viewModel
     @State private var showAddActivity = false
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    DatePicker("Select Date", selection: $viewModel.selectedDate, displayedComponents: .date)
-                        .datePickerStyle(.graphical)
-                        .tint(AppTheme.deepTeal)
-                        .onChange(of: viewModel.selectedDate) { _, newDate in
+                    DatePicker("Select Date", selection: Binding(
+                        get: { viewModel.selectedDate },
+                        set: { newDate in
                             Task { await viewModel.loadData(for: newDate) }
                         }
+                    ), displayedComponents: .date)
+                        .datePickerStyle(.graphical)
+                        .tint(AppTheme.deepTeal)
+
+                    if viewModel.isLoading {
+                        ProgressView()
+                            .padding()
+                    }
 
                     if let avg = viewModel.averageStress {
                         dailySummary(averageStress: avg)

@@ -1,9 +1,11 @@
 import SwiftUI
+import Charts
 
 struct DashboardView: View {
-    @State private var viewModel = DashboardViewModel()
+    @Environment(DashboardViewModel.self) private var viewModel
     @Environment(AuthViewModel.self) var authViewModel
     @State private var showScan = false
+    @State private var showEditName = false
 
     var body: some View {
         NavigationStack {
@@ -15,6 +17,9 @@ struct DashboardView: View {
                         vitalsGrid(reading: reading)
                     }
                     scanButton
+                    if !viewModel.weeklyTrend.isEmpty {
+                        trendChart
+                    }
                     if !viewModel.todayReadings.isEmpty {
                         todaySection
                     }
@@ -37,6 +42,9 @@ struct DashboardView: View {
             } message: {
                 Text(viewModel.error ?? "")
             }
+            .sheet(isPresented: $showEditName) {
+                EditNameSheet(authViewModel: authViewModel)
+            }
         }
     }
 
@@ -55,7 +63,12 @@ struct DashboardView: View {
             Spacer()
             Menu {
                 if let user = authViewModel.user {
-                    Text(user.displayName)
+                    Text(user.email)
+                }
+                Button {
+                    showEditName = true
+                } label: {
+                    Label("Edit Name", systemImage: "pencil")
                 }
                 Button(role: .destructive) {
                     authViewModel.signOut()
@@ -84,7 +97,7 @@ struct DashboardView: View {
     private var stressCard: some View {
         VStack(spacing: 12) {
             if let reading = viewModel.latestReading {
-                Text("Current Stress")
+                Text("High Cortisol")
                     .font(.caption)
                     .fontWeight(.semibold)
                     .textCase(.uppercase)
@@ -166,6 +179,42 @@ struct DashboardView: View {
         }
     }
 
+    // MARK: - Weekly Trend Chart
+
+    private var trendChart: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Cortisol Trend")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundStyle(AppTheme.textPrimary)
+                Spacer()
+                Text("7 days")
+                    .font(.caption)
+                    .foregroundStyle(AppTheme.textSecondary)
+            }
+
+            Chart(viewModel.weeklyTrend, id: \.date) { item in
+                BarMark(
+                    x: .value("Day", item.date, unit: .day),
+                    y: .value("Cortisol", item.avgStress)
+                )
+                .foregroundStyle(AppTheme.stressColor(for: StressCategory(level: item.avgStress)))
+                .cornerRadius(4)
+            }
+            .chartYScale(domain: 0...100)
+            .chartXAxis {
+                AxisMarks(values: .stride(by: .day)) { _ in
+                    AxisGridLine()
+                    AxisTick()
+                    AxisValueLabel(format: .dateTime.weekday(.abbreviated), centered: true)
+                }
+            }
+            .frame(height: 160)
+        }
+        .padding(16)
+        .cardStyle()
+    }
+
     // MARK: - Today Section
 
     private var todaySection: some View {
@@ -208,6 +257,45 @@ struct DashboardView: View {
     }
 }
 
+// MARK: - Edit Name Sheet
+
+struct EditNameSheet: View {
+    var authViewModel: AuthViewModel
+    @Environment(\.dismiss) private var dismiss
+    @State private var name = ""
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Display Name") {
+                    TextField("Your name", text: $name)
+                        .textContentType(.name)
+                }
+            }
+            .navigationTitle("Edit Name")
+            .navigationBarTitleDisplayMode(.inline)
+            .tint(AppTheme.deepTeal)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        Task {
+                            await authViewModel.updateDisplayName(name)
+                            dismiss()
+                        }
+                    }
+                    .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+            }
+            .onAppear {
+                name = authViewModel.user?.displayName ?? ""
+            }
+        }
+    }
+}
+
 // MARK: - Vital Card
 
 struct VitalCard: View {
@@ -239,5 +327,6 @@ struct VitalCard: View {
 
 #Preview {
     DashboardView()
+        .environment(DashboardViewModel())
         .environment(AuthViewModel())
 }

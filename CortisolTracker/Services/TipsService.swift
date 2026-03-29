@@ -48,26 +48,112 @@ class TipsService {
 
     private init() {}
 
-    /// Fetch AI-generated tips based on recent readings and activities.
-    /// Calls Firebase Cloud Function that uses an LLM to generate personalized tips.
+    /// Fetch AI-generated tips via Gemini API, falling back to static tips if unavailable.
     func fetchTips(userID: String, recentReadings: [CortisolReading], recentActivities: [Activity]) async throws -> [Tip] {
-        // TODO: Call Firebase Cloud Function endpoint for AI-generated tips
-        // let url = URL(string: "https://us-central1-PROJECT.cloudfunctions.net/generateTips")!
-        // var request = URLRequest(url: url)
-        // request.httpMethod = "POST"
-        // request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        // let body = ["userID": userID, "readings": recentReadings, "activities": recentActivities]
-        // request.httpBody = try JSONEncoder().encode(body)
-        // let (data, _) = try await URLSession.shared.data(for: request)
-        // return try JSONDecoder().decode([Tip].self, from: data)
+        let apiKey = Config.geminiAPIKey
+        guard !apiKey.isEmpty else {
+            return defaultTips(for: recentReadings)
+        }
 
-        // Fallback static tips for demo
-        return defaultTips(for: recentReadings)
+        do {
+            return try await fetchGeminiTips(readings: recentReadings, activities: recentActivities, apiKey: apiKey)
+        } catch {
+            print("Gemini tips failed: \(error.localizedDescription). Using static fallback.")
+            return defaultTips(for: recentReadings)
+        }
     }
+
+    // MARK: - Gemini API
+
+    private func fetchGeminiTips(readings: [CortisolReading], activities: [Activity], apiKey: String) async throws -> [Tip] {
+        let avgStress = readings.isEmpty ? 50.0 : readings.map(\.stressLevel).reduce(0, +) / Double(readings.count)
+        let stressLabel = avgStress > 60 ? "high" : avgStress > 40 ? "moderate" : "low"
+        let activitySummary = activities.prefix(5).map { "\($0.category.rawValue): \($0.title)" }.joined(separator: ", ")
+
+        let prompt = """
+        You are a wellness coach specializing in cortisol and stress management. Based on this user's data, generate exactly 5 short, personalized wellness tips.
+
+        User's recent data:
+        - Average stress/cortisol level: \(Int(avgStress))/100 (\(stressLabel))
+        - Recent activities: \(activitySummary.isEmpty ? "none logged" : activitySummary)
+
+        Return ONLY a valid JSON array with exactly 5 objects. No extra text, no markdown, no code fences:
+        [
+          {
+            "title": "Short actionable title (max 8 words)",
+            "body": "2-3 sentences with specific, practical advice tailored to their stress level.",
+            "category": "one of: breathing, exercise, sleep, nutrition, mindfulness, social, general"
+          }
+        ]
+        """
+
+        let urlString = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=\(apiKey)"
+        guard let url = URL(string: urlString) else {
+            throw TipsError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.timeoutInterval = 15
+
+        let body: [String: Any] = [
+            "contents": [
+                ["parts": [["text": prompt]]]
+            ],
+            "generationConfig": [
+                "temperature": 0.7,
+                "maxOutputTokens": 1024
+            ]
+        ]
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw TipsError.apiError((response as? HTTPURLResponse)?.statusCode ?? 0)
+        }
+
+        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let candidates = json["candidates"] as? [[String: Any]],
+              let firstCandidate = candidates.first,
+              let content = firstCandidate["content"] as? [String: Any],
+              let parts = content["parts"] as? [[String: Any]],
+              let text = parts.first?["text"] as? String else {
+            throw TipsError.invalidResponse
+        }
+
+        return try parseTipsJSON(from: text)
+    }
+
+    private func parseTipsJSON(from text: String) throws -> [Tip] {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        // Extract JSON array from between first [ and last ]
+        guard let startRange = trimmed.range(of: "["),
+              let endRange = trimmed.range(of: "]", options: .backwards) else {
+            throw TipsError.parseError
+        }
+        let jsonText = String(trimmed[startRange.lowerBound...endRange.upperBound])
+
+        guard let jsonData = jsonText.data(using: .utf8),
+              let rawArray = try JSONSerialization.jsonObject(with: jsonData) as? [[String: Any]] else {
+            throw TipsError.parseError
+        }
+
+        return rawArray.compactMap { obj in
+            guard let title = obj["title"] as? String,
+                  let body = obj["body"] as? String,
+                  let categoryStr = obj["category"] as? String,
+                  let category = TipCategory(rawValue: categoryStr) else { return nil }
+            return Tip(title: title, body: body, category: category)
+        }
+    }
+
+    // MARK: - Static Fallback
 
     private func defaultTips(for readings: [CortisolReading]) -> [Tip] {
         let avgStress = readings.isEmpty ? 50.0 : readings.map(\.stressLevel).reduce(0, +) / Double(readings.count)
-
         var tips: [Tip] = []
 
         if avgStress > 60 {
@@ -111,4 +197,13 @@ class TipsService {
 
         return tips
     }
+}
+
+// MARK: - Errors
+
+private enum TipsError: Error {
+    case invalidURL
+    case apiError(Int)
+    case invalidResponse
+    case parseError
 }

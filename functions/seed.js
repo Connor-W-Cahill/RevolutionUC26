@@ -1,6 +1,6 @@
 /**
  * Seed script — creates 5 test users in Firebase Auth + Firestore.
- * All passwords: root
+ * All passwords: rootroot
  *
  * Usage:
  *   cd functions
@@ -27,10 +27,10 @@ if (keyArg) {
   const serviceAccount = JSON.parse(fs.readFileSync(keyArg, "utf8"));
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    projectId: "revolutionuc26",
+    projectId: "cortisol-tracker-revuc26",
   });
 } else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-  admin.initializeApp({ projectId: "revolutionuc26" });
+  admin.initializeApp({ projectId: "cortisol-tracker-revuc26" });
 } else {
   console.error("❌ No credentials found.");
   console.error("   Run: node seed.js /path/to/serviceAccountKey.json");
@@ -52,7 +52,7 @@ const TEST_USERS = [
   { displayName: "Emma Wilson",   email: "emma@test.com" },
 ];
 
-const PASSWORD = "rootroot"; // Firebase requires ≥6 chars
+const PASSWORD = "rootroot";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -63,23 +63,29 @@ function randomBetween(min, max) {
 function daysAgo(n) {
   const d = new Date();
   d.setDate(d.getDate() - n);
+  d.setHours(12, 0, 0, 0);
   return d;
 }
 
-function hoursAgo(n) {
-  return new Date(Date.now() - n * 3600 * 1000);
-}
-
-/** Generate realistic readings spread over the last 7 days */
+/** Generate readings spread over the last 30 days (2-4 per day) */
 function generateReadings(userID) {
   const readings = [];
-  for (let day = 6; day >= 0; day--) {
-    const countForDay = Math.floor(randomBetween(1, 4)); // 1-3 per day
+  for (let day = 29; day >= 0; day--) {
+    const countForDay = Math.floor(randomBetween(2, 5)); // 2-4 per day
     for (let i = 0; i < countForDay; i++) {
-      const pulseRate    = Math.round(randomBetween(58, 105));
+      const pulseRate     = Math.round(randomBetween(58, 105));
       const breathingRate = Math.round(randomBetween(12, 22));
-      const timestamp    = daysAgo(day);
-      timestamp.setHours(Math.floor(randomBetween(7, 22)), Math.floor(randomBetween(0, 59)));
+      const timestamp     = daysAgo(day);
+      timestamp.setHours(
+        Math.floor(randomBetween(7, 22)),
+        Math.floor(randomBetween(0, 59))
+      );
+
+      // Realistic stress pattern: higher mid-day/afternoon, lower morning/evening
+      const hour = timestamp.getHours();
+      const baseStress = hour >= 9 && hour <= 17
+        ? randomBetween(30, 85)
+        : randomBetween(10, 45);
 
       readings.push({
         id: db.collection("readings").doc().id,
@@ -88,7 +94,7 @@ function generateReadings(userID) {
         pulseRate,
         breathingRate,
         bloodPressureSystolic: Math.round(randomBetween(110, 145)),
-        stressLevel: Math.round(randomBetween(10, 85)),
+        stressLevel: Math.round(baseStress),
         hrv: Math.round(randomBetween(20, 80)),
         spO2: Math.round(randomBetween(95, 100)),
         respiratoryRate: breathingRate,
@@ -100,30 +106,39 @@ function generateReadings(userID) {
   return readings;
 }
 
+// Activity categories must match Swift enum ActivityCategory raw values exactly
 const ACTIVITY_TEMPLATES = [
-  { category: "sleep",    title: "Night sleep",      notes: "7 hours, woke up once" },
-  { category: "exercise", title: "Morning run",       notes: "3km, felt good" },
-  { category: "diet",     title: "Healthy lunch",     notes: "Salad and chicken" },
-  { category: "stressor", title: "Work deadline",     notes: "Presentation prep" },
-  { category: "sleep",    title: "Power nap",         notes: "20 mins" },
-  { category: "exercise", title: "Gym session",       notes: "Upper body" },
-  { category: "diet",     title: "Skipped breakfast", notes: null },
-  { category: "other",    title: "Meditation",        notes: "10 min guided" },
+  { category: "Sleep",      title: "Night sleep",        notes: "7 hours, woke up once", rating: 4 },
+  { category: "Exercise",   title: "Morning run",         notes: "3km, felt good",        rating: 5 },
+  { category: "Diet",       title: "Healthy lunch",       notes: "Salad and chicken",     rating: 4 },
+  { category: "Work",       title: "Work deadline",       notes: "Presentation prep",     rating: 2 },
+  { category: "Sleep",      title: "Power nap",           notes: "20 mins",               rating: 4 },
+  { category: "Exercise",   title: "Gym session",         notes: "Upper body",            rating: 4 },
+  { category: "Diet",       title: "Skipped breakfast",   notes: null,                    rating: 2 },
+  { category: "Meditation", title: "Guided meditation",   notes: "10 min session",        rating: 5 },
+  { category: "Social",     title: "Lunch with friends",  notes: "Great mood boost",      rating: 5 },
+  { category: "Work",       title: "Long meeting",        notes: "Back-to-back calls",    rating: 2 },
+  { category: "Exercise",   title: "Evening yoga",        notes: "30 minutes",            rating: 5 },
+  { category: "Diet",       title: "Meal prep Sunday",    notes: "Prepped for the week",  rating: 4 },
+  { category: "Sleep",      title: "Poor sleep",          notes: "Only 5 hours",          rating: 1 },
+  { category: "Social",     title: "Family dinner",       notes: "Relaxing evening",      rating: 5 },
+  { category: "Meditation", title: "Breathing exercise",  notes: "Box breathing 10 min",  rating: 4 },
 ];
 
-/** Generate 5 activities spread over the last 3 days */
+/** Generate activities spread over the last 15 days */
 function generateActivities(userID) {
-  return ACTIVITY_TEMPLATES.slice(0, 5).map((tmpl, i) => {
-    const date = daysAgo(i % 3);
-    const dateStr = date.toISOString().split("T")[0];
+  return ACTIVITY_TEMPLATES.map((tmpl, i) => {
+    const dayOffset = i % 15; // spread across 15 days
+    const date = daysAgo(dayOffset);
+    // Store date as Firestore Timestamp so iOS range queries work correctly
     return {
       id: db.collection("activities").doc().id,
       userID,
-      date: dateStr,
+      date: admin.firestore.Timestamp.fromDate(date),
       category: tmpl.category,
       title: tmpl.title,
       notes: tmpl.notes,
-      rating: Math.floor(randomBetween(2, 6)), // 2-5
+      rating: tmpl.rating,
     };
   });
 }
@@ -179,7 +194,6 @@ async function seed() {
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         updatedAt: admin.firestore.FieldValue.serverTimestamp(),
       });
-      // Update friendIDs on both users
       await db.collection("users").doc(a).update({ friendIDs: admin.firestore.FieldValue.arrayUnion(b) });
       await db.collection("users").doc(b).update({ friendIDs: admin.firestore.FieldValue.arrayUnion(a) });
     }
@@ -192,10 +206,19 @@ async function seed() {
     const readings   = generateReadings(uid);
     const activities = generateActivities(uid);
 
-    const batch = db.batch();
-    readings.forEach(r   => batch.set(db.collection("readings").doc(r.id),   r));
-    activities.forEach(a => batch.set(db.collection("activities").doc(a.id), a));
-    await batch.commit();
+    // Write in batches of 499 (Firestore limit is 500 ops per batch)
+    const allDocs = [
+      ...readings.map(r   => ({ col: "readings",   id: r.id,   data: r   })),
+      ...activities.map(a => ({ col: "activities", id: a.id,   data: a   })),
+    ];
+
+    for (let i = 0; i < allDocs.length; i += 400) {
+      const batch = db.batch();
+      allDocs.slice(i, i + 400).forEach(({ col, id, data }) => {
+        batch.set(db.collection(col).doc(id), data);
+      });
+      await batch.commit();
+    }
 
     console.log(`  ✓ ${displayName}: ${readings.length} readings, ${activities.length} activities`);
   }

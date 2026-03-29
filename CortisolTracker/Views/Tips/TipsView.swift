@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TipsView: View {
-    @State private var viewModel = TipsViewModel()
+    @Environment(TipsViewModel.self) private var viewModel
 
     var body: some View {
         NavigationStack {

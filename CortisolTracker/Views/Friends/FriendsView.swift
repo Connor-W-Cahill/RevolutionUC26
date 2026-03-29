@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct FriendsView: View {
-    @State private var viewModel = FriendsViewModel()
+    @Environment(FriendsViewModel.self) private var viewModel
     @State private var showSearch = false
 
     var body: some View {
@@ -30,7 +30,7 @@ struct FriendsView: View {
                 }
             }
             .sheet(isPresented: $showSearch) {
-                SearchFriendsSheet(viewModel: viewModel)
+                SearchFriendsSheet()
             }
             .task { await viewModel.loadFriends() }
             .refreshable { await viewModel.loadFriends() }
@@ -91,17 +91,18 @@ struct FriendRow: View {
 }
 
 struct SearchFriendsSheet: View {
-    @Bindable var viewModel: FriendsViewModel
+    @Environment(FriendsViewModel.self) private var viewModel
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
+        @Bindable var vm = viewModel
         NavigationStack {
             List {
-                if viewModel.searchResults.isEmpty && !viewModel.searchQuery.isEmpty && !viewModel.isSearching {
-                    ContentUnavailableView.search(text: viewModel.searchQuery)
+                if vm.searchResults.isEmpty && !vm.searchQuery.isEmpty && !vm.isSearching {
+                    ContentUnavailableView.search(text: vm.searchQuery)
                 }
 
-                ForEach(viewModel.searchResults) { user in
+                ForEach(vm.searchResults) { user in
                     HStack {
                         Circle()
                             .fill(AppTheme.mint)
@@ -118,7 +119,7 @@ struct SearchFriendsSheet: View {
                         Spacer()
 
                         Button {
-                            Task { await viewModel.addFriend(user) }
+                            Task { await vm.addFriend(user) }
                         } label: {
                             Image(systemName: "plus.circle.fill")
                                 .foregroundStyle(AppTheme.deepTeal)
@@ -128,9 +129,9 @@ struct SearchFriendsSheet: View {
             }
             .navigationTitle("Add Friend")
             .navigationBarTitleDisplayMode(.inline)
-            .searchable(text: $viewModel.searchQuery, prompt: "Search by name")
-            .onChange(of: viewModel.searchQuery) { _, _ in
-                Task { await viewModel.searchUsers() }
+            .searchable(text: $vm.searchQuery, prompt: "Search by name")
+            .onChange(of: vm.searchQuery) { _, _ in
+                Task { await vm.searchUsers() }
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
