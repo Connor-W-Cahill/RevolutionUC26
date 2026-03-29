@@ -5,6 +5,13 @@ import {onDocumentCreated} from "firebase-functions/v2/firestore";
 import {defineSecret} from "firebase-functions/params";
 import Anthropic from "@anthropic-ai/sdk";
 import * as crypto from "crypto";
+import {
+  getBreathingRate,
+  getPulseRate,
+  getStressLevel,
+  makeFriendshipID,
+  toDateStr,
+} from "./utils";
 
 admin.initializeApp();
 const db = admin.firestore();
@@ -53,26 +60,6 @@ interface DayTrend {
   avgPulseRate: number | null;
   avgBreathingRate: number | null;
   readingCount: number;
-}
-
-function getStressLevel(reading: Reading): number {
-  if (typeof reading.stressLevel === "number") {
-    return reading.stressLevel;
-  }
-
-  const pulseRate = reading.pulseRate ?? reading.heartRate ?? 0;
-  const breathingRate = reading.breathingRate ?? reading.respiratoryRate ?? 0;
-  const pulseStress = Math.max(0, Math.min(100, ((pulseRate - 60) / 40) * 50));
-  const breathingStress = Math.max(0, Math.min(100, ((breathingRate - 12) / 8) * 50));
-  return Math.min(100, pulseStress + breathingStress);
-}
-
-function getPulseRate(reading: Reading): number | null {
-  return reading.pulseRate ?? reading.heartRate ?? null;
-}
-
-function getBreathingRate(reading: Reading): number | null {
-  return reading.breathingRate ?? reading.respiratoryRate ?? null;
 }
 
 // ─── Spike Detection ────────────────────────────────────────────────────────
@@ -150,10 +137,6 @@ async function detectSpike(readingID: string, reading: Reading): Promise<void> {
 }
 
 // ─── Streak Management ──────────────────────────────────────────────────────
-
-function toDateStr(date: Date): string {
-  return date.toISOString().split("T")[0];
-}
 
 async function updateStreak(
   userID: string,
@@ -300,10 +283,6 @@ export const recomputeGroupDailyStats = onCall(async (request) => {
 });
 
 // ─── Friend Management ─────────────────────────────────────────────────────
-
-function makeFriendshipID(uidA: string, uidB: string): string {
-  return uidA < uidB ? `${uidA}_${uidB}` : `${uidB}_${uidA}`;
-}
 
 export const sendFriendRequest = onCall(async (request) => {
   if (!request.auth) {
