@@ -401,7 +401,7 @@
 			mainGroup = E34174832F7867F600AEA8AA;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				E398B41D2F788B1300F08A62 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				AA030001AABBCCDD00AA0001 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E341748D2F7867F700AEA8AA /* Products */;
@@ -629,6 +629,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_PREVIEWS = YES;
@@ -671,6 +672,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_PREVIEWS = YES;
@@ -855,14 +857,7 @@
 				minimumVersion = 11.0.0;
 			};
 		};
-		E398B41D2F788B1300F08A62 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 12.11.0;
-			};
-		};
+
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
