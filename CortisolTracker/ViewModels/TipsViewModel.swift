@@ -1,10 +1,10 @@
 import Foundation
 
-@MainActor
-class TipsViewModel: ObservableObject {
-    @Published var tips: [Tip] = []
-    @Published var isLoading = false
-    @Published var error: String?
+@Observable
+class TipsViewModel {
+    var tips: [Tip] = []
+    var isLoading = false
+    var error: String?
 
     private let firebase = FirebaseService.shared
     private let tipsService = TipsService.shared

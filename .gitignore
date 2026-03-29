@@ -5,6 +5,11 @@
 
 # Firebase
 .firebase/
+*serviceAccount*.json
+*service-account*.json
+*service_account*.json
+key.json
+*Key.json
 firebase-debug.log
 firestore-debug.log
 ui-debug.log

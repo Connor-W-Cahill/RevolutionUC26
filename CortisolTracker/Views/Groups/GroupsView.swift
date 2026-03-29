@@ -2,12 +2,12 @@ import SwiftUI
 
 // MARK: - Groups ViewModel
 
-@MainActor
-class GroupsViewModel: ObservableObject {
-    @Published var groups: [StressGroup] = []
-    @Published var dailyStats: [String: GroupDailyStat] = [:]  // keyed by groupID
-    @Published var isLoading = false
-    @Published var error: String?
+@Observable
+class GroupsViewModel {
+    var groups: [StressGroup] = []
+    var dailyStats: [String: GroupDailyStat] = [:]  // keyed by groupID
+    var isLoading = false
+    var error: String?
 
     private let firebase = FirebaseService.shared
 
@@ -65,7 +65,7 @@ class GroupsViewModel: ObservableObject {
 // MARK: - Groups View
 
 struct GroupsView: View {
-    @StateObject private var viewModel = GroupsViewModel()
+    @State private var viewModel = GroupsViewModel()
     @State private var showCreateGroup = false
 
     var body: some View {
@@ -161,7 +161,7 @@ struct GroupRow: View {
 
 struct GroupDetailView: View {
     let group: StressGroup
-    @ObservedObject var viewModel: GroupsViewModel
+    var viewModel: GroupsViewModel
     @State private var stats: [GroupDailyStat] = []
     @State private var isLoadingStats = false
     @State private var showAddMember = false
@@ -214,12 +214,12 @@ struct GroupDetailView: View {
                 ForEach(group.memberIDs, id: \.self) { memberID in
                     HStack {
                         Circle()
-                            .fill(.deepTeal.opacity(0.15))
+                            .fill(Color.deepTeal.opacity(0.15))
                             .frame(width: 32, height: 32)
                             .overlay {
                                 Image(systemName: "person.fill")
                                     .font(.caption)
-                                    .foregroundStyle(.deepTeal)
+                                    .foregroundStyle(Color.deepTeal)
                             }
                         Text(memberID == firebase.currentUserID ? "You" : memberID)
                             .font(.subheadline)
@@ -241,7 +241,7 @@ struct GroupDetailView: View {
                         showAddMember = true
                     } label: {
                         Label("Add member", systemImage: "person.badge.plus")
-                            .foregroundStyle(.deepTeal)
+                            .foregroundStyle(Color.deepTeal)
                     }
                 }
             }
@@ -271,7 +271,7 @@ struct GroupDetailView: View {
 // MARK: - Create Group Sheet
 
 struct CreateGroupSheet: View {
-    @ObservedObject var viewModel: GroupsViewModel
+    var viewModel: GroupsViewModel
     @Environment(\.dismiss) private var dismiss
     @State private var groupName = ""
 
@@ -311,7 +311,7 @@ struct CreateGroupSheet: View {
 
 struct AddGroupMemberSheet: View {
     let group: StressGroup
-    @ObservedObject var viewModel: GroupsViewModel
+    var viewModel: GroupsViewModel
     @Environment(\.dismiss) private var dismiss
     @State private var memberID = ""
 

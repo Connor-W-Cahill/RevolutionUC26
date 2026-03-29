@@ -3,12 +3,12 @@ import FirebaseAuth
 import AuthenticationServices
 import CryptoKit
 
-@MainActor
-class AuthViewModel: ObservableObject {
-    @Published var user: AppUser?
-    @Published var isAuthenticated = false
-    @Published var isLoading = false
-    @Published var error: String?
+@Observable
+class AuthViewModel {
+    var user: AppUser?
+    var isAuthenticated = false
+    var isLoading = false
+    var error: String?
 
     private let firebase = FirebaseService.shared
     private var currentNonce: String?

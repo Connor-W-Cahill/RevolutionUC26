@@ -1,13 +1,13 @@
 import Foundation
 
-@MainActor
-class DashboardViewModel: ObservableObject {
-    @Published var latestReading: CortisolReading?
-    @Published var todayReadings: [CortisolReading] = []
-    @Published var latestSpike: SpikeEvent?
-    @Published var streak: Streak?
-    @Published var isLoading = false
-    @Published var error: String?
+@Observable
+class DashboardViewModel {
+    var latestReading: CortisolReading?
+    var todayReadings: [CortisolReading] = []
+    var latestSpike: SpikeEvent?
+    var streak: Streak?
+    var isLoading = false
+    var error: String?
 
     private let firebase = FirebaseService.shared
 

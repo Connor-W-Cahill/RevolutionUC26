@@ -1,15 +1,14 @@
 import SwiftUI
-import SmartSpectraSwiftSDK
 
 struct ScanView: View {
     @Environment(\.dismiss) private var dismiss
-    @ObservedObject var sdk = SmartSpectraSwiftSDK.shared
     let presage = PresageService.shared
-    let onComplete: (CortisolReading) -> Void
     let userID: String
+    let onComplete: (CortisolReading) -> Void
 
     @State private var reading: CortisolReading?
     @State private var showResult = false
+    @State private var error: String?
 
     var body: some View {
         NavigationStack {
@@ -48,22 +47,47 @@ struct ScanView: View {
                     .multilineTextAlignment(.center)
             }
 
-            // Presage camera UI
-            SmartSpectraView()
-                .clipShape(RoundedRectangle(cornerRadius: AppTheme.cardRadius))
-                .padding(.horizontal)
-                .onChange(of: sdk.metricsBuffer?.pulse.strict.value) { _, newValue in
-                    guard let newValue, newValue > 0 else { return }
-                    if let extracted = presage.extractReading(userID: userID) {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            reading = extracted
-                            showResult = true
+            if presage.isScanning {
+                VStack(spacing: 12) {
+                    ProgressView(value: presage.scanProgress)
+                        .progressViewStyle(.linear)
+                        .tint(AppTheme.deepTeal)
+                        .padding(.horizontal, 40)
+                    Text("\(Int(presage.scanProgress * 100))%")
+                        .font(.caption)
+                        .foregroundStyle(AppTheme.textSecondary)
+                }
+                .padding()
+            } else {
+                Button {
+                    Task {
+                        do {
+                            let result = try await presage.startScan(userID: userID)
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                reading = result
+                                showResult = true
+                            }
+                        } catch {
+                            self.error = error.localizedDescription
                         }
                     }
+                } label: {
+                    HStack {
+                        Image(systemName: "camera.viewfinder")
+                        Text("Start Scan")
+                    }
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(AppTheme.deepTeal)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .padding(.horizontal, 40)
                 }
+            }
 
-            if !sdk.resultErrorText.isEmpty {
-                Text(sdk.resultErrorText)
+            if let error {
+                Text(error)
                     .font(.caption)
                     .foregroundStyle(AppTheme.stressHigh)
                     .padding()
@@ -86,7 +110,6 @@ struct ScanView: View {
                     .foregroundStyle(AppTheme.textSecondary)
                     .tracking(0.5)
 
-                // Stress gauge
                 ZStack {
                     Circle()
                         .stroke(AppTheme.divider, lineWidth: 10)
@@ -108,7 +131,6 @@ struct ScanView: View {
                     .font(.headline)
                     .foregroundStyle(AppTheme.stressTextColor(for: reading.stressCategory))
 
-                // Vitals row
                 HStack(spacing: 12) {
                     resultVital(icon: "heart.fill", value: "\(Int(reading.pulseRate))", unit: "BPM", color: AppTheme.warmCoral)
                     resultVital(icon: "wind", value: "\(Int(reading.breathingRate))", unit: "br/min", color: AppTheme.calmBlue)
@@ -118,7 +140,6 @@ struct ScanView: View {
                 }
                 .padding(.vertical, 8)
 
-                // Save button
                 Button {
                     onComplete(reading)
                     dismiss()
@@ -132,7 +153,6 @@ struct ScanView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
 
-                // Scan again
                 Button {
                     withAnimation {
                         self.reading = nil
@@ -146,17 +166,12 @@ struct ScanView: View {
                         .padding(.vertical, 14)
                         .background(AppTheme.deepTeal.opacity(0.08))
                         .clipShape(RoundedRectangle(cornerRadius: 12))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(AppTheme.deepTeal, lineWidth: 2)
-                        )
+                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(AppTheme.deepTeal, lineWidth: 2))
                 }
 
-                Button("Discard") {
-                    dismiss()
-                }
-                .foregroundStyle(AppTheme.textSecondary)
-                .padding(.top, 4)
+                Button("Discard") { dismiss() }
+                    .foregroundStyle(AppTheme.textSecondary)
+                    .padding(.top, 4)
             }
             .padding()
         }
@@ -164,8 +179,7 @@ struct ScanView: View {
 
     private func resultVital(icon: String, value: String, unit: String, color: Color) -> some View {
         VStack(spacing: 6) {
-            Image(systemName: icon)
-                .foregroundStyle(color)
+            Image(systemName: icon).foregroundStyle(color)
             Text(value)
                 .font(.system(size: 22, weight: .bold, design: .rounded))
                 .foregroundStyle(AppTheme.textPrimary)

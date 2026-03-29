@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SignUpView: View {
-    @ObservedObject var authViewModel: AuthViewModel
+    @Bindable var authViewModel: AuthViewModel
     @Environment(\.dismiss) private var dismiss
 
     @State private var displayName = ""

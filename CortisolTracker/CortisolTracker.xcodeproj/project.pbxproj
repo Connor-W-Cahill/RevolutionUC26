@@ -1,0 +1,888 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AA010001AABBCCDD00AA0001 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = AA020001AABBCCDD00AA0001 /* FirebaseAuth */; };
+		AA010002AABBCCDD00AA0001 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA020002AABBCCDD00AA0001 /* FirebaseCore */; };
+		AA010003AABBCCDD00AA0001 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = AA020003AABBCCDD00AA0001 /* FirebaseFirestore */; };
+		AA010004AABBCCDD00AA0001 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = AA020004AABBCCDD00AA0001 /* FirebaseFunctions */; };
+		BB010001AABBCCDD00BB0001 /* CortisolTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020001AABBCCDD00BB0001 /* CortisolTrackerApp.swift */; };
+		BB010002AABBCCDD00BB0001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020002AABBCCDD00BB0001 /* ContentView.swift */; };
+		BB010003AABBCCDD00BB0001 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020003AABBCCDD00BB0001 /* Colors.swift */; };
+		BB010004AABBCCDD00BB0001 /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020004AABBCCDD00BB0001 /* Color+Hex.swift */; };
+		BB010005AABBCCDD00BB0001 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020005AABBCCDD00BB0001 /* Activity.swift */; };
+		BB010006AABBCCDD00BB0001 /* CortisolReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020006AABBCCDD00BB0001 /* CortisolReading.swift */; };
+		BB010007AABBCCDD00BB0001 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020007AABBCCDD00BB0001 /* Friend.swift */; };
+		BB010008AABBCCDD00BB0001 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020008AABBCCDD00BB0001 /* Group.swift */; };
+		BB010009AABBCCDD00BB0001 /* Share.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020009AABBCCDD00BB0001 /* Share.swift */; };
+		BB010010AABBCCDD00BB0001 /* SpikeEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020010AABBCCDD00BB0001 /* SpikeEvent.swift */; };
+		BB010011AABBCCDD00BB0001 /* Streak.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020011AABBCCDD00BB0001 /* Streak.swift */; };
+		BB010012AABBCCDD00BB0001 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020012AABBCCDD00BB0001 /* User.swift */; };
+		BB010013AABBCCDD00BB0001 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020013AABBCCDD00BB0001 /* FirebaseService.swift */; };
+		BB010014AABBCCDD00BB0001 /* PresageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020014AABBCCDD00BB0001 /* PresageService.swift */; };
+		BB010015AABBCCDD00BB0001 /* TipsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020015AABBCCDD00BB0001 /* TipsService.swift */; };
+		BB010016AABBCCDD00BB0001 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020016AABBCCDD00BB0001 /* AuthViewModel.swift */; };
+		BB010017AABBCCDD00BB0001 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020017AABBCCDD00BB0001 /* CalendarViewModel.swift */; };
+		BB010018AABBCCDD00BB0001 /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020018AABBCCDD00BB0001 /* DashboardViewModel.swift */; };
+		BB010019AABBCCDD00BB0001 /* FriendsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020019AABBCCDD00BB0001 /* FriendsViewModel.swift */; };
+		BB010020AABBCCDD00BB0001 /* TipsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020020AABBCCDD00BB0001 /* TipsViewModel.swift */; };
+		BB010021AABBCCDD00BB0001 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020021AABBCCDD00BB0001 /* LoginView.swift */; };
+		BB010022AABBCCDD00BB0001 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020022AABBCCDD00BB0001 /* SignUpView.swift */; };
+		BB010023AABBCCDD00BB0001 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020023AABBCCDD00BB0001 /* CalendarView.swift */; };
+		BB010024AABBCCDD00BB0001 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020024AABBCCDD00BB0001 /* DashboardView.swift */; };
+		BB010025AABBCCDD00BB0001 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020025AABBCCDD00BB0001 /* FriendsView.swift */; };
+		BB010026AABBCCDD00BB0001 /* GroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020026AABBCCDD00BB0001 /* GroupsView.swift */; };
+		BB010027AABBCCDD00BB0001 /* TipsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020027AABBCCDD00BB0001 /* TipsView.swift */; };
+		BB010028AABBCCDD00BB0001 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020028AABBCCDD00BB0001 /* Theme.swift */; };
+		BB010029AABBCCDD00BB0001 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB020029AABBCCDD00BB0001 /* ScanView.swift */; };
+		CC010001AABBCCDD00CC0001 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CC020001AABBCCDD00CC0001 /* GoogleService-Info.plist */; };
+		CC010002AABBCCDD00CC0002 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC020002AABBCCDD00CC0002 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E341749C2F7867F900AEA8AA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E34174842F7867F600AEA8AA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E341748B2F7867F600AEA8AA;
+			remoteInfo = CortisolTracker;
+		};
+		E34174A62F7867F900AEA8AA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E34174842F7867F600AEA8AA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E341748B2F7867F600AEA8AA;
+			remoteInfo = CortisolTracker;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		E341748C2F7867F700AEA8AA /* CortisolTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CortisolTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E341749B2F7867F900AEA8AA /* CortisolTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CortisolTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E34174A52F7867F900AEA8AA /* CortisolTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CortisolTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB020001AABBCCDD00BB0001 /* CortisolTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CortisolTrackerApp.swift; sourceTree = "<group>"; };
+		BB020002AABBCCDD00BB0001 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		BB020003AABBCCDD00BB0001 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		BB020004AABBCCDD00BB0001 /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
+		BB020005AABBCCDD00BB0001 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
+		BB020006AABBCCDD00BB0001 /* CortisolReading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CortisolReading.swift; sourceTree = "<group>"; };
+		BB020007AABBCCDD00BB0001 /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
+		BB020008AABBCCDD00BB0001 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
+		BB020009AABBCCDD00BB0001 /* Share.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Share.swift; sourceTree = "<group>"; };
+		BB020010AABBCCDD00BB0001 /* SpikeEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpikeEvent.swift; sourceTree = "<group>"; };
+		BB020011AABBCCDD00BB0001 /* Streak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Streak.swift; sourceTree = "<group>"; };
+		BB020012AABBCCDD00BB0001 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		BB020013AABBCCDD00BB0001 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
+		BB020014AABBCCDD00BB0001 /* PresageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresageService.swift; sourceTree = "<group>"; };
+		BB020015AABBCCDD00BB0001 /* TipsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsService.swift; sourceTree = "<group>"; };
+		BB020016AABBCCDD00BB0001 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		BB020017AABBCCDD00BB0001 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
+		BB020018AABBCCDD00BB0001 /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+		BB020019AABBCCDD00BB0001 /* FriendsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewModel.swift; sourceTree = "<group>"; };
+		BB020020AABBCCDD00BB0001 /* TipsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsViewModel.swift; sourceTree = "<group>"; };
+		BB020021AABBCCDD00BB0001 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		BB020022AABBCCDD00BB0001 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		BB020023AABBCCDD00BB0001 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		BB020024AABBCCDD00BB0001 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		BB020025AABBCCDD00BB0001 /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
+		BB020026AABBCCDD00BB0001 /* GroupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsView.swift; sourceTree = "<group>"; };
+		BB020027AABBCCDD00BB0001 /* TipsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsView.swift; sourceTree = "<group>"; };
+		BB020028AABBCCDD00BB0001 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		BB020029AABBCCDD00BB0001 /* ScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
+		CC020001AABBCCDD00CC0001 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CC020002AABBCCDD00CC0002 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "CortisolTracker/Assets.xcassets"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		E341748E2F7867F700AEA8AA /* CortisolTracker */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CortisolTracker;
+			sourceTree = "<group>";
+		};
+		E341749E2F7867F900AEA8AA /* CortisolTrackerTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CortisolTrackerTests;
+			sourceTree = "<group>";
+		};
+		E34174A82F7867F900AEA8AA /* CortisolTrackerUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = CortisolTrackerUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E34174892F7867F600AEA8AA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA010001AABBCCDD00AA0001 /* FirebaseAuth in Frameworks */,
+				AA010002AABBCCDD00AA0001 /* FirebaseCore in Frameworks */,
+				AA010003AABBCCDD00AA0001 /* FirebaseFirestore in Frameworks */,
+				AA010004AABBCCDD00AA0001 /* FirebaseFunctions in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E34174982F7867F900AEA8AA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E34174A22F7867F900AEA8AA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E34174832F7867F600AEA8AA = {
+			isa = PBXGroup;
+			children = (
+				BB030001AABBCCDD00BB0001 /* CortisolTracker */,
+				E341749E2F7867F900AEA8AA /* CortisolTrackerTests */,
+				E34174A82F7867F900AEA8AA /* CortisolTrackerUITests */,
+				E341748D2F7867F700AEA8AA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BB030001AABBCCDD00BB0001 /* CortisolTracker */ = {
+			isa = PBXGroup;
+			children = (
+				BB020001AABBCCDD00BB0001 /* CortisolTrackerApp.swift */,
+				BB020002AABBCCDD00BB0001 /* ContentView.swift */,
+				BB020003AABBCCDD00BB0001 /* Colors.swift */,
+				BB020028AABBCCDD00BB0001 /* Theme.swift */,
+				CC020002AABBCCDD00CC0002 /* Assets.xcassets */,
+				BB030002AABBCCDD00BB0001 /* Extensions */,
+				BB030003AABBCCDD00BB0001 /* Models */,
+				BB030004AABBCCDD00BB0001 /* Services */,
+				BB030005AABBCCDD00BB0001 /* ViewModels */,
+				BB030006AABBCCDD00BB0001 /* Views */,
+			);
+			name = CortisolTracker;
+			sourceTree = SOURCE_ROOT;
+		};
+		BB030002AABBCCDD00BB0001 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				BB020004AABBCCDD00BB0001 /* Color+Hex.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		BB030003AABBCCDD00BB0001 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BB020005AABBCCDD00BB0001 /* Activity.swift */,
+				BB020006AABBCCDD00BB0001 /* CortisolReading.swift */,
+				BB020007AABBCCDD00BB0001 /* Friend.swift */,
+				BB020008AABBCCDD00BB0001 /* Group.swift */,
+				BB020009AABBCCDD00BB0001 /* Share.swift */,
+				BB020010AABBCCDD00BB0001 /* SpikeEvent.swift */,
+				BB020011AABBCCDD00BB0001 /* Streak.swift */,
+				BB020012AABBCCDD00BB0001 /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		BB030004AABBCCDD00BB0001 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				BB020013AABBCCDD00BB0001 /* FirebaseService.swift */,
+				BB020014AABBCCDD00BB0001 /* PresageService.swift */,
+				BB020015AABBCCDD00BB0001 /* TipsService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		BB030005AABBCCDD00BB0001 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				BB020016AABBCCDD00BB0001 /* AuthViewModel.swift */,
+				BB020017AABBCCDD00BB0001 /* CalendarViewModel.swift */,
+				BB020018AABBCCDD00BB0001 /* DashboardViewModel.swift */,
+				BB020019AABBCCDD00BB0001 /* FriendsViewModel.swift */,
+				BB020020AABBCCDD00BB0001 /* TipsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		BB030006AABBCCDD00BB0001 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BB030007AABBCCDD00BB0001 /* Auth */,
+				BB030008AABBCCDD00BB0001 /* Calendar */,
+				BB030009AABBCCDD00BB0001 /* Dashboard */,
+				BB030010AABBCCDD00BB0001 /* Friends */,
+				BB030011AABBCCDD00BB0001 /* Groups */,
+				BB030012AABBCCDD00BB0001 /* Tips */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		BB030007AABBCCDD00BB0001 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				BB020021AABBCCDD00BB0001 /* LoginView.swift */,
+				BB020022AABBCCDD00BB0001 /* SignUpView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		BB030008AABBCCDD00BB0001 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				BB020023AABBCCDD00BB0001 /* CalendarView.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
+		BB030009AABBCCDD00BB0001 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				BB020024AABBCCDD00BB0001 /* DashboardView.swift */,
+				BB020029AABBCCDD00BB0001 /* ScanView.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		BB030010AABBCCDD00BB0001 /* Friends */ = {
+			isa = PBXGroup;
+			children = (
+				BB020025AABBCCDD00BB0001 /* FriendsView.swift */,
+			);
+			path = Friends;
+			sourceTree = "<group>";
+		};
+		BB030011AABBCCDD00BB0001 /* Groups */ = {
+			isa = PBXGroup;
+			children = (
+				BB020026AABBCCDD00BB0001 /* GroupsView.swift */,
+			);
+			path = Groups;
+			sourceTree = "<group>";
+		};
+		BB030012AABBCCDD00BB0001 /* Tips */ = {
+			isa = PBXGroup;
+			children = (
+				BB020027AABBCCDD00BB0001 /* TipsView.swift */,
+			);
+			path = Tips;
+			sourceTree = "<group>";
+		};
+		E341748D2F7867F700AEA8AA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E341748C2F7867F700AEA8AA /* CortisolTracker.app */,
+				E341749B2F7867F900AEA8AA /* CortisolTrackerTests.xctest */,
+				E34174A52F7867F900AEA8AA /* CortisolTrackerUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E341748B2F7867F600AEA8AA /* CortisolTracker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E34174AF2F7867F900AEA8AA /* Build configuration list for PBXNativeTarget "CortisolTracker" */;
+			buildPhases = (
+				E34174882F7867F600AEA8AA /* Sources */,
+				E34174892F7867F600AEA8AA /* Frameworks */,
+				E341748A2F7867F600AEA8AA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				E341748E2F7867F700AEA8AA /* CortisolTracker */,
+			);
+			name = CortisolTracker;
+			packageProductDependencies = (
+				AA020001AABBCCDD00AA0001 /* FirebaseAuth */,
+				AA020002AABBCCDD00AA0001 /* FirebaseCore */,
+				AA020003AABBCCDD00AA0001 /* FirebaseFirestore */,
+				AA020004AABBCCDD00AA0001 /* FirebaseFunctions */,
+			);
+			productName = CortisolTracker;
+			productReference = E341748C2F7867F700AEA8AA /* CortisolTracker.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E341749A2F7867F900AEA8AA /* CortisolTrackerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E34174B22F7867F900AEA8AA /* Build configuration list for PBXNativeTarget "CortisolTrackerTests" */;
+			buildPhases = (
+				E34174972F7867F900AEA8AA /* Sources */,
+				E34174982F7867F900AEA8AA /* Frameworks */,
+				E34174992F7867F900AEA8AA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E341749D2F7867F900AEA8AA /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				E341749E2F7867F900AEA8AA /* CortisolTrackerTests */,
+			);
+			name = CortisolTrackerTests;
+			packageProductDependencies = (
+			);
+			productName = CortisolTrackerTests;
+			productReference = E341749B2F7867F900AEA8AA /* CortisolTrackerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E34174A42F7867F900AEA8AA /* CortisolTrackerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E34174B52F7867F900AEA8AA /* Build configuration list for PBXNativeTarget "CortisolTrackerUITests" */;
+			buildPhases = (
+				E34174A12F7867F900AEA8AA /* Sources */,
+				E34174A22F7867F900AEA8AA /* Frameworks */,
+				E34174A32F7867F900AEA8AA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E34174A72F7867F900AEA8AA /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				E34174A82F7867F900AEA8AA /* CortisolTrackerUITests */,
+			);
+			name = CortisolTrackerUITests;
+			packageProductDependencies = (
+			);
+			productName = CortisolTrackerUITests;
+			productReference = E34174A52F7867F900AEA8AA /* CortisolTrackerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E34174842F7867F600AEA8AA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2630;
+				LastUpgradeCheck = 2630;
+				TargetAttributes = {
+					E341748B2F7867F600AEA8AA = {
+						CreatedOnToolsVersion = 26.3;
+					};
+					E341749A2F7867F900AEA8AA = {
+						CreatedOnToolsVersion = 26.3;
+						TestTargetID = E341748B2F7867F600AEA8AA;
+					};
+					E34174A42F7867F900AEA8AA = {
+						CreatedOnToolsVersion = 26.3;
+						TestTargetID = E341748B2F7867F600AEA8AA;
+					};
+				};
+			};
+			buildConfigurationList = E34174872F7867F600AEA8AA /* Build configuration list for PBXProject "CortisolTracker" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E34174832F7867F600AEA8AA;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E398B41D2F788B1300F08A62 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = E341748D2F7867F700AEA8AA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E341748B2F7867F600AEA8AA /* CortisolTracker */,
+				E341749A2F7867F900AEA8AA /* CortisolTrackerTests */,
+				E34174A42F7867F900AEA8AA /* CortisolTrackerUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E341748A2F7867F600AEA8AA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC010001AABBCCDD00CC0001 /* GoogleService-Info.plist in Resources */,
+				CC010002AABBCCDD00CC0002 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E34174992F7867F900AEA8AA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E34174A32F7867F900AEA8AA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E34174882F7867F600AEA8AA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB010001AABBCCDD00BB0001 /* CortisolTrackerApp.swift in Sources */,
+				BB010002AABBCCDD00BB0001 /* ContentView.swift in Sources */,
+				BB010003AABBCCDD00BB0001 /* Colors.swift in Sources */,
+				BB010004AABBCCDD00BB0001 /* Color+Hex.swift in Sources */,
+				BB010005AABBCCDD00BB0001 /* Activity.swift in Sources */,
+				BB010006AABBCCDD00BB0001 /* CortisolReading.swift in Sources */,
+				BB010007AABBCCDD00BB0001 /* Friend.swift in Sources */,
+				BB010008AABBCCDD00BB0001 /* Group.swift in Sources */,
+				BB010009AABBCCDD00BB0001 /* Share.swift in Sources */,
+				BB010010AABBCCDD00BB0001 /* SpikeEvent.swift in Sources */,
+				BB010011AABBCCDD00BB0001 /* Streak.swift in Sources */,
+				BB010012AABBCCDD00BB0001 /* User.swift in Sources */,
+				BB010013AABBCCDD00BB0001 /* FirebaseService.swift in Sources */,
+				BB010014AABBCCDD00BB0001 /* PresageService.swift in Sources */,
+				BB010015AABBCCDD00BB0001 /* TipsService.swift in Sources */,
+				BB010016AABBCCDD00BB0001 /* AuthViewModel.swift in Sources */,
+				BB010017AABBCCDD00BB0001 /* CalendarViewModel.swift in Sources */,
+				BB010018AABBCCDD00BB0001 /* DashboardViewModel.swift in Sources */,
+				BB010019AABBCCDD00BB0001 /* FriendsViewModel.swift in Sources */,
+				BB010020AABBCCDD00BB0001 /* TipsViewModel.swift in Sources */,
+				BB010021AABBCCDD00BB0001 /* LoginView.swift in Sources */,
+				BB010022AABBCCDD00BB0001 /* SignUpView.swift in Sources */,
+				BB010023AABBCCDD00BB0001 /* CalendarView.swift in Sources */,
+				BB010024AABBCCDD00BB0001 /* DashboardView.swift in Sources */,
+				BB010025AABBCCDD00BB0001 /* FriendsView.swift in Sources */,
+				BB010026AABBCCDD00BB0001 /* GroupsView.swift in Sources */,
+				BB010027AABBCCDD00BB0001 /* TipsView.swift in Sources */,
+				BB010028AABBCCDD00BB0001 /* Theme.swift in Sources */,
+				BB010029AABBCCDD00BB0001 /* ScanView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E34174972F7867F900AEA8AA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E34174A12F7867F900AEA8AA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E341749D2F7867F900AEA8AA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E341748B2F7867F600AEA8AA /* CortisolTracker */;
+			targetProxy = E341749C2F7867F900AEA8AA /* PBXContainerItemProxy */;
+		};
+		E34174A72F7867F900AEA8AA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E341748B2F7867F600AEA8AA /* CortisolTracker */;
+			targetProxy = E34174A62F7867F900AEA8AA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		E34174AD2F7867F900AEA8AA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E34174AE2F7867F900AEA8AA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		E34174B02F7867F900AEA8AA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.revolutionuc26.CortisolTracker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Debug;
+		};
+		E34174B12F7867F900AEA8AA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.revolutionuc26.CortisolTracker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				XROS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Release;
+		};
+		E34174B32F7867F900AEA8AA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.revolutionuc26.CortisolTrackerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CortisolTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CortisolTracker";
+				XROS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Debug;
+		};
+		E34174B42F7867F900AEA8AA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.revolutionuc26.CortisolTrackerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CortisolTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CortisolTracker";
+				XROS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Release;
+		};
+		E34174B62F7867F900AEA8AA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.revolutionuc26.CortisolTrackerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_TARGET_NAME = CortisolTracker;
+				XROS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Debug;
+		};
+		E34174B72F7867F900AEA8AA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.revolutionuc26.CortisolTrackerUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_TARGET_NAME = CortisolTracker;
+				XROS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E34174872F7867F600AEA8AA /* Build configuration list for PBXProject "CortisolTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E34174AD2F7867F900AEA8AA /* Debug */,
+				E34174AE2F7867F900AEA8AA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E34174AF2F7867F900AEA8AA /* Build configuration list for PBXNativeTarget "CortisolTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E34174B02F7867F900AEA8AA /* Debug */,
+				E34174B12F7867F900AEA8AA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E34174B22F7867F900AEA8AA /* Build configuration list for PBXNativeTarget "CortisolTrackerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E34174B32F7867F900AEA8AA /* Debug */,
+				E34174B42F7867F900AEA8AA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E34174B52F7867F900AEA8AA /* Build configuration list for PBXNativeTarget "CortisolTrackerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E34174B62F7867F900AEA8AA /* Debug */,
+				E34174B72F7867F900AEA8AA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AA030001AABBCCDD00AA0001 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
+		E398B41D2F788B1300F08A62 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.11.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AA020001AABBCCDD00AA0001 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA030001AABBCCDD00AA0001 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		AA020002AABBCCDD00AA0001 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA030001AABBCCDD00AA0001 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		AA020003AABBCCDD00AA0001 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA030001AABBCCDD00AA0001 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		AA020004AABBCCDD00AA0001 /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA030001AABBCCDD00AA0001 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFunctions;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = E34174842F7867F600AEA8AA /* Project object */;
+}

@@ -1,14 +1,14 @@
 import Foundation
 
-@MainActor
-class FriendsViewModel: ObservableObject {
-    @Published var friends: [Friend] = []
-    @Published var searchResults: [Friend] = []
-    @Published var searchQuery = ""
-    @Published var shares: [String: Share] = [:]  // keyed by viewerID (friend's ID)
-    @Published var isLoading = false
-    @Published var isSearching = false
-    @Published var error: String?
+@Observable
+class FriendsViewModel {
+    var friends: [Friend] = []
+    var searchResults: [Friend] = []
+    var searchQuery = ""
+    var shares: [String: Share] = [:]  // keyed by viewerID (friend's ID)
+    var isLoading = false
+    var isSearching = false
+    var error: String?
 
     private let firebase = FirebaseService.shared
 
