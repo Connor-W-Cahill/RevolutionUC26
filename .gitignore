@@ -55,5 +55,8 @@ npm-debug.log*
 # Presage
 PRESAGE_SDK_GUIDE.md
 
+# Xcode build output
+CortisolTracker/build/
+
 # Uploads
 uploads/
